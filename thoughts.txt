@@ -1,0 +1,48 @@
+.time to make the final product for now
+
+.also add a monologue for why you used axaj and not postreSQL
+.finished
+
+.why does the log in page redirect to the '/' page and not the bookReview page
+.finished
+
+..when i then go to the bookReview page, im logged out
+.finished
+
+.fix the footer, projects dropdownList of the small pages, in weatherApp and bookReview
+.finished
+
+.go through the css and js, and group up the classes that match and go through the other code to make
+ cleaner code.
+.finished
+
+.have the todolist, be auto divided, if one or if two (rows)
+.finished
+
+.find out how to maybe add the weather app to the user, so you can manipulate the session info
+ to remove whatever the previous person has entered, sometimes it still persists
+ ...finished...
+
+.add a session to everything to it is deleted...find out if it persists even if the user closes the page,
+ and is not logged in
+ ...finished...
+
+.check the server data for the weatherApp, and send everything,
+ filter them by the ui.js and chart instead
+ .finished
+
+.fix the results send from the weatherApp, 
+..if you want to, make the weather app a graph
+.finished
+
+.make database_random a randomly generated password
+.finished
+
+.add the days to the beginning of the times in the charts
+finished
+
+..also implement auto email resets, or changes
+finished (return maybe when i know more, but now my code don't work anymore-corrected)
+
+.maybe later find out a way to make sure if the user has multiple google accounts linked, that it works,
+ because now, it doesnt

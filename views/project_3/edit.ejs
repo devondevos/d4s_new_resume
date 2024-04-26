@@ -1,0 +1,61 @@
+<%- include('../partials/header.ejs') %> <!-- header -->
+<main class="secondPage">
+    <div id="secondPage">
+        <div class="container">
+            <div class="card bookCard">
+                <div class="row">
+                    <div class="card bookCard col-12">
+                        <h1>Edit Book's Details</h1>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="card bookCard col-12">
+                        <% users.forEach((user) => { %>
+                            <form class="edit_form" action="/books/<%= user.id %>" method="post">
+                                <div class="row">
+                                    <div class="card bookCard col-12">
+                                        <div class="bookImgContainer">
+                                            <img class="bookImg" src="<%= user.book_url %>" alt="picture of the book name: <%= user.book_name %>">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="card bookCard col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12">
+                                        <p>Book ISBN number: </p><input name="bookISBN" type="text" value="<%= user.book_isbn %>">
+                                    </div>
+                                    <div class="card bookCard col-xxl-8 col-xl-8 col-lg-8 col-md-8 col-sm-12">
+                                        <p>Name: </p><input name="bookName" value="<%= user.book_name %>" required> 
+                                    </div>
+                                    <div class="card bookCard col-12">
+                                        <p>Search for the books ISBN number at <a href="https://openlibrary.org/search" target="_blank">click here</a>, <br/>click on the corresponding book and find the isbn number near the bottom of the books information (Under ID numbers)</p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="card bookCard col-12">
+                                        <p>Book Info: </p><textarea rows="5" class="enterBookInfo" name="book_info" required><%= user.book_info %></textarea>
+                                        <div id="charCount">Characters left: 255</div>
+                                    </div>
+                                </div><br/>
+                                <div class="row">
+                                    <div class="card rating_time bookCard col-xxl-2 col-xl-2 col-lg-2 col-md-4 col-sm-4">
+                                        <p>Rating: <input id="rating_input" name="book_rating" value="<%= user.rating %>" required></p>
+                                    </div>
+                                    <div class="card rating_time bookCard_time col-xxl-10 col-xl-10 col-lg-10 col-md-8 col-sm-8">
+                                        <p>Date: <%= user.entry_date %></p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="card bookCard col-xxl-2 col-xl-2 col-lg-3 col-md-3 col-sm-3">
+                                        <input type="hidden" name="_method" value="PATCH">
+                                        <button type="submit">Submit Update</button>
+                                    </div>
+                                </div>
+                            </form>
+                        <% }); %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<%- include('../partials/footer.ejs') %><!-- footer -->

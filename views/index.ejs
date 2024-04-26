@@ -1,0 +1,223 @@
+<%- include('partials/header.ejs') %> <!-- header -->
+
+<main id="mainPage" class="main">
+    <div class="firstPage">
+        <div id="hero">
+            <div id="myCarousel" class="carousel slide mb-6" data-bs-ride="carousel">
+                <div class="carousel-indicators mb-1">
+                  <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="0" class="" aria-label="Slide 1"></button>
+                  <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="1" aria-label="Slide 2" class="active" aria-current="true"></button>
+                  <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                </div>
+                <div class="carousel-inner">
+                    <div class="carousel-item">
+                        <div class="container col-xxl-8 px-4 py-0">
+                            <div class="row flex-lg-row-reverse align-items-center g-5 pb-5 pt-1">
+                                <div class="col-10 col-sm-10 col-lg-6 mt-2">
+                                    <img id="profilePic1" src="./images/pic1.jpg" class="mx-lg-auto img-fluid" alt="picture of me" width="400" height="200" loading="lazy">
+                                </div>
+                                <div class="col-lg-6">
+                                    <h1 class="fw-bold myName text-body-emphasis">name="Devon D. De Vos"</h1>
+                                    <p>I learned from working in various factories, that hardwork = success. To respect everyone, whether you have differences, because for bigger tasks, teamwork is essential in a workplace.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item active">
+                        <div class="container col-xxl-8 px-4 py-0">
+                            <div class="row flex-lg-row-reverse align-items-center g-5 pb-5 pt-1">
+                                <div class="col-10 col-sm-10 col-lg-6 mt-2">
+                                    <img id="profilePic2" src="./images/pic2.jpg" class="mx-lg-auto img-fluid" alt="picture of me" width="400" height="200" loading="lazy">
+                                </div>
+                                <div class="col-lg-6">
+                                    <h1 class="fw-bold myName text-body-emphasis">name="Devon D. De Vos"</h1>
+                                    <p>I was always interested in computers, my mother always used to tease me, telling me that as soon as I could walk, I was in front of a computer screen.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="container col-xxl-8 px-4 py-0">
+                            <div class="row flex-lg-row-reverse align-items-center g-5 pb-5 pt-1">
+                                <div class="col-10 col-sm-10 col-lg-6 mt-2">
+                                    <img id="profilePic3" src="./images/pic3.jpg" class="mx-lg-auto img-fluid" alt="picture of me" width="400" height="200" loading="lazy">
+                                </div>
+                                <div class="col-lg-6">
+                                    <h1 class="fw-bold myName text-body-emphasis">name="Devon D. De Vos"</h1>
+                                    <p>If I cannot solve a coding problem, then it's all I can think of until I find a solution, either by dreaming or thinking about it.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </div>
+        <div id="myWork">
+            <div class="container px-4 py-5" id="custom-cards">
+                <h2 class="headerWork pb-2">My Projects</h2>
+                <div class="row row-cols-1 row-cols-lg-3 align-items-stretch g-4 py-5">
+                    <div class="col">
+                        <a class="link" href="/todoList">
+                        <div id="project_one" class="card card-link card-cover h-75 overflow-hidden text-bg-dark rounded-4 shadow-lg">
+                            <div class="d-flex flex-column h-100 p-5 pb-3 text-black text-shadow-1">
+                                <h3 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold">Todo List</h3>
+                                <ul class="d-flex list-unstyled mt-auto">
+                                    <li class="d-flex align-items-center">
+                                        <small>Todo List</small>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        </a>
+                    </div>
+                    <div class="col">
+                        <a class="link" href="/weatherApp">
+                        <div id="project_two" class="card card-link card-cover h-75 overflow-hidden text-bg-dark rounded-4 shadow-lg">
+                            <div class="d-flex flex-column h-100 p-5 pb-3 text-black text-shadow-1">
+                                <h3 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold">Weather App</h3>
+                                <ul class="d-flex list-unstyled mt-auto">
+                                    <li class="d-flex align-items-center">
+                                        <small>Weather App</small>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        </a>
+                    </div>
+                    <div class="col">
+                        <a class="link" href="/bookReview">
+                        <div id="project_three" class="card card-link card-cover h-75 overflow-hidden text-bg-dark rounded-4 shadow-lg">
+                            <div class="d-flex flex-column h-100 p-5 pb-3 text-black text-shadow-1">
+                                <h3 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold">Book Review</h3>
+                                <ul class="d-flex list-unstyled mt-auto">
+                                    <li class="d-flex align-items-center">
+                                        <small>Book Review</small>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        </a>
+                    </div>
+                    <div class="col">
+                        <a class="link" href="#coming_soon">
+                        <div id="coming_soon" class="card card-link card-cover h-75 overflow-hidden text-bg-dark rounded-4 shadow-lg">
+                            <div class="d-flex flex-column h-100 p-5 pb-3 text-shadow-1">
+                                <h3 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold">Coming Soon</h3>
+                                <ul class="d-flex list-unstyled mt-auto">
+                                    <li class="d-flex align-items-center">
+                                        <small>Project 3</small>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="educationSkills">
+            <div class="container px-4 py-5" id="featured-3">
+                <h2 class="pb-2 headerWork">Education</h2>
+                <div class="col g-4 py-5 col-cols-1 col-cols-lg-2">
+                    <div class="feature col">
+                        <h3 class="fs-3 text-body-emphasis">2018</h3>
+                        <p>I studied at Strelitzia High School, learning about Microsoft (Word, Express etc), in Uitenhage.</p>
+                    </div>
+                    <div class="feature col">
+                        <h3 class="fs-3 text-body-emphasis">2019</h3>
+                        <p>I studied Web Development fundamentals, leadership skills and personal discovery through HyperionDev powered by Life Choices, in Cape Town.</p>
+                    </div>
+                    <div class="feature col">
+                        <h3 class="fs-3 text-body-emphasis">2020</h3>
+                        <p>While I did my Production Technology learnership, I learned the fundamentals in running a business and leadership skills, in Uitenhage.</p>
+                    </div>
+                    <div class="feature col">
+                        <h3 class="fs-3 text-body-emphasis">2023</h3>
+                        <p>Im studing Web Development, to refresh certain concepts, in Uitenhage.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="container px-4 py-5" id="featured-3">
+                <h2 class="pb-2 headerWork">Skills</h2>
+                <div class="row g-4 py-5 row-cols-1 row-cols-lg-1">
+                    <div class="feature col">
+                        <h3 class="fs-2 text-body-emphasis">Front-End Web Development</h3>
+                        <ul class="web">
+                            <li>- HTML 5</li>
+                            <li>- CSS 3</li>
+                            <li>- Flexbox</li>
+                            <li>- Grid</li>
+                            <li>- Bootstrap 5</li>
+                            <li>- Javascript ES6</li>
+                            <li>- jQuery, ejs</li>
+                        </ul>
+                    </div>
+                    <div class="feature col">
+                        <h3 class="fs-2 text-body-emphasis">Back-End Web Development</h3>
+                        <ul class="web">
+                            <li>- Node.js</li>
+                            <li>- Express.js</li>
+                            <li>- REST API's</li>
+                            <li>Databases</li>
+                            <li>- PostgreSQL</li>
+                            <!--<li>React.js</li>
+                                <li>React Hooks</li> (Almost completed with my studies of it, SOON!)-->
+                        </ul>
+                    </div>
+                    <div class="feature col">
+                        <h3 class="fs-2 text-body-emphasis">Others</h3>
+                        <ul class="web">
+                            <li>- Web Design</li>
+                            <li>- Deployment with GitHub Pages</li>
+                            <!--<li>Web3 Development on the Internet Computer</li>
+                                <li>Blockchain technology</li>
+                                <li>Token contract development</li>
+                                <li>NFT minting, buying and selling logic</li> (learning not yet completed, but SOON!)-->
+                            <li>- Microsoft Literate: (Word, Access, Excel, Powerpoint)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="info">
+            <div id="aboutMe" class="container my-5">
+                <div class="rounded-3">
+                    <h2 class="headerWork text-body-emphasis">About Me</h2>
+                    <p class="pt-3">
+                        - I'm a hardworking individual who is motivated by God and driven by my 'insane' goals. I'm an active indivual who doesn't indulge in alcohol nor cigarettes, one of my goals is to be healthy and active until I'm 119 years of age.
+                    <br/>    
+                        - I was always interested in computers, my mother always used to tease me, telling me that as soon as I could walk, I was in front of a computer screen. 
+                    <br/>
+                        - My religious belief is Christianity.
+                    <br/>
+                        - I learned from working in various factories, that hardwork = success. To respect everyone, whether you have differences, because for bigger tasks, teamwork is essential in a workplace.
+                    <br/>
+                        - I enjoy doing excercises. From a young age, I learned that hardwork is a neccessity if you want something you didn't have before.
+                    <br/>
+                        - I'm an Arsenal fan, a Golden Lions (Rugby Club) supporter and a Bok (South African National Rugby Team) supporter.
+                    <br/>
+                        - I enjoy watching anime and playing games occasionally.
+                    <br/>
+                        - If there is something I don't understand, I will try to find out a way to understand it, regardless how long it takes me or what I need to sacrifice.
+                    <br/>
+                        - Also if I cannot solve a coding problem, then it's all I can think of until I find a solution, either by dreaming or thinking about it.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <a class="return_to_top" href="#header"><p>Return to the top...</p></a>
+        </div>
+    </div>
+    
+</main>
+
+<%- include('partials/footer.ejs') %><!-- footer -->

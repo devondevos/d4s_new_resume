@@ -1,0 +1,42 @@
+<%- include('partials/header.ejs') %> <!-- header -->
+
+<main class="thirdPage">
+    <div>
+        <h1>Weather App</h1>
+        <p>Your tries is limited on this page (there is a rate-limiter on how many times you can search for the weather, also your information is not stored in any way) Enjoy.</p>
+        <p>The rate-limiter is there to protect my website from abuse or bots or overuse.</p>
+        <form class="userForm" action="/weatherApp" method="POST">
+            <input class="address userInput" type="text" name="userAddress" placeholder="Enter the suburb:" autocomplete="off">
+            <input class="suburb userInput" type="text" name="userSuburb" placeholder="Enter the town/city:" required autocomplete="off">
+            <br/>
+            <div class="daysAndSubmit">
+                <input class="days userInput" type="number" name="userDays" placeholder="Days:" required autocomplete="off">
+                <input class="submit userInput" type="submit" value="Submit">
+            </div>
+        </form>
+    </div>
+    <div class="results">
+    <div class="currentTimeAndDay">
+        <% if (locals.currentTimeAndDay) { %>
+            <%= currentTimeAndDay %><br/>
+            <p>TimeZone: <%= timeZone %></p>
+        <% } %>
+    </div>
+    <div>
+    </div>
+    <div class="containerPageTwo">
+        <% if (typeof errorMessage !== 'undefined' && errorMessage) { %>
+            <p><%= errorMessage %></p>
+        <% } else if (Array.isArray(data) && data.length > 0) { %>
+            <p class="weatherInfo"><%= JSON.stringify(data) %></p>
+            <canvas id="weatherChart"></canvas>
+        <% } else { %>
+            <p>Enter your location correctly.</p>
+            <p>When entering your address, don't add the street type, eg. street, avenue, cresent etc.</p>
+        <% } %>
+    </div>
+    </div>
+    
+</main>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<%- include('partials/footer.ejs') %><!-- footer -->

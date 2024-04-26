@@ -1,0 +1,831 @@
+/* styles for normal/regular sized screens */
+body {
+    height: 100vh;
+    background-color: #85b6e5;
+    font-size: 1rem;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    font-family: -apple-system, BlinkMacSystemFont, avenir next, avenir, segoe ui,
+    helvetica neue, helvetica, Ubuntu, roboto, noto, arial, sans-serif;
+}
+
+header {
+    background-color: #e5b485;
+    color: black;
+    padding-top: 10px;
+}
+
+footer {
+    text-align: center;
+    background-color: #e5b485;
+    color: black;
+    padding: 10px;
+    height: auto;
+    margin-top: auto;
+}
+
+a {
+    text-decoration: none;
+}
+
+.nav-pills {
+    justify-content: flex-end;
+}
+
+.word {
+    font-size: 2rem; /* Adjust font size as needed */
+    color: black;
+    padding-left: 7px;
+}
+
+.nav-link {
+    color: black;
+    min-height: 100%;
+}
+
+.nav-link:hover {
+    color: black;
+    background-color: #b7906a;
+    min-height: 100%;
+}
+
+.nav-item:active,
+.active-link {
+    background-color: #b7906a;
+    min-height: 100%;
+}
+
+.nav-item:active:hover {
+    background-color: #e5b485;
+}
+
+.nav-item {
+    transition: background-color 0.2s ease;
+}
+
+.nav-item:hover {
+    background-color: #e5b485;
+    border-radius: 6px;
+}
+
+/*first page, about me*/
+
+.myName {
+    font-size: 2rem;
+}
+
+#aboutMe {
+    padding: 10px;
+}
+
+#hero {
+    border-bottom: 1px solid grey;
+    background: linear-gradient(-45deg, #304458, #624072, #85b6e5, grey, white);
+	background-size: 400% 400%;
+	animation: gradient 15s ease infinite;
+}
+
+@keyframes gradient {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
+
+.link {
+    text-decoration: none;
+}
+
+.card-link {
+    background-size: 100%;
+}
+
+.card-link:hover {
+    background-size: 150%;
+    background-position: center;
+}
+
+.web {
+    list-style-type: none;
+}
+
+.headerLogo {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background-color: #e5b485; /* Background color for the sticky header */
+    z-index: 1000; /* Ensure the header appears above other content */
+}
+
+.theLogo {
+    padding: 0px;
+}
+
+.headerName {
+    padding-top: 40px;
+}
+
+.loginButton {
+    display: flex;
+    justify-content: right;
+    padding: 0px;
+}
+
+.users {
+    padding-top: 7px;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.usersLogin {
+    background-color: #e5b485;
+    border-radius: 6px;
+    border: none;
+    height: auto;
+    width: 100%;
+    padding: 5px;
+    margin: 3px;
+}
+
+.usersLogin:hover {
+    cursor: pointer;
+    background-color: #b7906a;
+
+}
+
+.login_signUp {
+    margin-bottom: 2px;
+}
+
+.signUp:hover, .login:hover {
+    background-color: #b7906a;
+}
+
+.headerLinks {
+    color: black;
+}
+
+.headerWork {
+    border-bottom: 3px solid grey;
+}
+
+#profilePic1, #profilePic2, #profilePic3 {
+    border-radius: 20px;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+/* Style for the dropdown button */
+.dropdown button {
+    padding: 10px;
+    font-size: 16px;
+    border: none;
+    border-radius: 6%;
+    background-color: #85b6e5;
+    color: black;
+    cursor: pointer;
+    width: 100%;
+}
+
+.dropdown button:hover {
+    background-color: #e5b485;
+}
+
+/* Style for the dropdown content */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #e5b485;
+    min-width: 100%;
+    z-index: 2;
+
+}
+
+/* Style for the dropdown items */
+.dropdown-content a {
+    display: block;
+    padding: 10px 3px;
+    text-decoration: none;
+    color: black;
+    transition: background-color 0.2s ease;
+}
+
+/* Show the dropdown content when the button is hovered */
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.dropdown.active .dropdown-content {
+    display: block;
+}
+
+.dropdown-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: lightgray;
+    color: #85b6e5;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    display: none;
+    z-index: 2;
+}
+
+.dropdown-btn-content {
+    display: none;
+    position: fixed;
+    bottom: 50px;
+    right: 20px;
+    background-color: #e5b485;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+    border-radius: 15px;
+    padding: 11px 15px;
+    min-width: 200px;
+    z-index: 3;
+}
+
+.show {
+    display: block;
+}
+
+a.fixed_link {
+    width: 100%;
+    padding: 12px 16px;
+}
+
+.fixed_link:hover {
+    background-color: #b7906a;
+}
+
+#project_one {
+    background-image: url('../images/Project1.png');
+    background-size: cover;
+}
+
+#project_two {
+    background-image: url('../images/Project2.png');
+    background-size: cover;
+}
+
+#project_three {
+    background-image: url('../images/Project3.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+#coming_soon {
+    background-image: url('../images/comingSoon.png');
+    background-size: cover; 
+}
+
+/*second page, project 1*/
+.secondPage, .thirdPage {
+    padding: 10px;
+}
+
+.thirdPage {
+    display: flex;
+    flex-direction: column;
+}
+
+.todoButton {
+    transition: background-color 0.5s ease;
+    display: block;
+    box-sizing: border-box;
+    text-align: center;
+    margin-right: 2px;
+    border-radius: 10px; /* Adjust the radius value to control the roundness */
+    padding: 5px; /* Add padding to see the effect more clearly */
+}
+
+.editInput {
+    border: none;
+    border-bottom: 1px solid lightgrey;
+    padding: 6px;
+}
+
+.okButton {
+    transition: background-color 0.5s ease;
+    display: block;
+    box-sizing: border-box;
+    text-align: center;
+    border: none;
+    background-color: white;
+    border-radius: 10px; /* Adjust the radius value to control the roundness */
+    padding: 5px; /* Add padding to see the effect more clearly */
+}
+
+.okButton:hover {
+    background-color: #e5b485;
+}
+
+#submitButton {
+    padding: 6px;
+    background-color: white;
+}
+
+.todoButton:hover {
+    cursor: pointer;
+    background-color: #e5b485;
+}
+
+#theForm {
+    display: flex;
+    border: 1px solid black;
+    background-color: white;
+    border: 1px solid #333; /* Border color */
+    border-radius: 10px; /* Adjust the radius value to control the roundness */
+    padding: 5px; /* Add padding to see the effect more clearly */
+}
+
+#listItem {
+    border: none;
+    border-right: 3px solid lightgray;
+}
+
+textarea {
+    resize: none;
+    margin: 0;
+    padding: 0;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    outline: none;
+    width: 100%;
+    overflow-y: hidden;
+    height: auto;
+}
+
+#itemShown {
+    list-style-type: decimal;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(calc(49% - 20px), 1fr));
+    grid-gap: 25px;
+}
+
+.listedItems {
+    white-space: pre-line;
+    height: auto;
+    resize: none;
+    border: 1px solid #333; /* Border color */
+    border-radius: 10px; /* Adjust the radius value to control the roundness */
+    padding: 5px; /* Add padding to see the effect more clearly */
+    word-wrap: break-word;
+    outline: none;
+    margin: 0px; /* Adjust spacing between items */
+    box-sizing: border-box;
+    overflow-y: hidden;
+    background-color: white;
+}
+
+.todoItemListButtons {
+    display: flex;
+    flex-direction: row;
+}
+
+/* third page */
+
+.results {
+    position: relative;
+}
+
+.currentTimeAndDay {
+    text-align: right;
+}
+
+.containerPageTwo {
+    flex: 1; /* Let it grow to fill available space */
+    padding-top: 5px;
+    top: 25px;
+    width: 100%;
+    overflow-x: auto; /* or overflow-x: scroll; */
+    white-space: nowrap; /* prevent cards from wrapping onto new lines */
+    margin-left: 0;
+    padding-left: 0;
+    padding-top: 5px;
+    margin-top: 25px;
+}
+
+.containerPageTwo::-webkit-scrollbar {
+    height: 20px;
+}
+
+.containerPageTwo::-webkit-scrollbar-thumb {
+    background-color: #dcb084;
+    width: 50px;
+}
+
+.containerPageTwo::-webkit-scrollbar:hover {
+    background-color: hsl(32, 100%, 80%);
+    cursor: pointer;
+}
+
+.card-container {
+    background-color: white;
+    display: inline-flex;
+    width: 165px;
+    height: 135px;
+    border-radius: 15px;
+}
+
+.weatherCard {
+    background-color: white;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+.weatherInfo {
+    display: none;
+}
+
+#weatherChart {
+    width: 100% !important;
+    height: 400px !important;
+}
+
+.userForm {
+    width: 50%;
+    background-color: white;
+    position: relative;
+    border-radius: 10px;
+    border: 2px solid grey;
+    padding: 5px;
+}
+
+.userInput {
+    width: 100%;
+    height: 40px;
+    min-width: min-content;
+    border: none;
+    border-bottom: 2px solid lightgrey;
+    padding: 2px;
+    margin: 2px;
+}
+
+.submit {
+    background-color: lightgrey;
+    transition: background-color 0.5s ease;
+    border-radius: 10px;
+}
+
+.submit:hover {
+    background-color: #e5b485;
+}
+
+/*project 3*/
+/* styles for normal/regular sized screens */
+
+/* Style for the dropdown button */
+.dropdown .projectsButton {
+    padding: 6px;
+    font-size: 16px;
+    border: none;
+    height: 95%;
+    border-radius: 5px;
+    background-color: #85b6e5;
+    color: black;
+    cursor: pointer;
+    width: 110px;
+    display: inline-block; /* or inline-flex */
+    position: relative; /* Ensure proper positioning of the dropdown */
+    text-align: center; /* Center the dropdown horizontally */
+}
+
+.projects-dropdown {
+    border: 2px solid lightgray;
+    border-radius: 5px;
+    padding: 2px;
+    width: 150px;
+    position: absolute; /* Position the dropdown relative to the button */
+    top: 100%; /* Align the top of the dropdown with the bottom of the button */
+    left: 50%; /* Move the dropdown to the center of the button */
+    transform: translateX(-50%); /* Adjust horizontally to center the dropdown */
+}
+
+.dropdown .projectsButton:hover {
+    display: inline-block; /* or inline-flex */
+    position: relative; /* Ensure proper positioning of the dropdown */
+    text-align: center; /* Center the dropdown horizontally */
+    background-color: #e5b485;
+}
+
+.user-dropdown {
+    font-size: small;
+    border: 2px solid lightgray;
+    border-radius: 5px;
+    padding: 2px;
+    width: 250px;
+    position: absolute; /* Position the dropdown relative to the button */
+    top: 100%; /* Align the top of the dropdown with the bottom of the button */
+    right: 0%; /* Move the dropdown to the center of the button */
+}
+
+.profile {
+    border: 2px solid lightgray;
+    border-radius: 5px;
+    padding: 2px;
+    height: 75px;
+    display: flex;
+    flex-direction: column; /* Change to column layout */
+    align-items: center;
+    justify-content: center;
+}
+
+.bi-profile-circle {
+    margin-bottom: 5px; /* Add margin to separate from the username */
+}
+
+.username {
+    text-align: center;
+    width: 100%;
+    height: auto;
+    margin-bottom: 0px;
+}
+
+.usersButton {
+    padding: 5px;
+    font-size: 16px;
+    border: none;
+    border-radius: 6%;
+    background-color: #e5b485 !important;
+    color: black;
+    cursor: pointer;
+    width: 150px;
+}
+
+.usersButton:hover {
+    background-color: #b7906a !important;
+}
+
+.dropdown-content a.project1:hover, a.project2:hover, a.project3:hover {
+    background-color: #b7906a;
+    color: black;
+}
+
+.userOptions {
+    background-color: #e5b485 !important;
+    border: 0px;
+    width: 100%;
+    height: auto;
+    padding: 3px !important;
+}
+
+.link-userOptions {
+    padding: 0px !important;
+}
+
+.userOptions:hover {
+    background-color: #b7906a !important;
+}
+
+.notLogIn {
+    width: auto;
+}
+
+.bi {
+    padding-left: 3px;
+}
+
+.container {
+    padding: 0px;
+}
+
+.row {
+    margin: 0px;
+}
+
+.sortForm {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.sortBy {
+    border: 1px solid lightgrey;
+    border-radius: 10px;
+    padding: 5px;
+    background-color: white;
+}
+
+.dropdown-item:hover {
+    cursor: pointer;
+    background-color: lightgrey;
+}
+
+.bookCard {
+    border: none !important;
+    position: relative !important;
+    background-color: #85b6e5 !important;
+}
+
+#rating_input {
+    width: 70px;
+}
+
+.newBookSubmit {
+    height: 42.8px;
+    border-radius: 15px;
+}
+
+.bookCard_time {
+    text-align: right;
+    background-color: #85b6e5;
+    border: none;
+}
+
+.enterBookRating {
+    width: 75%;
+}
+
+.bookContainer {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.bookItem {
+    border: 4px solid lightgrey;
+    border-radius: 2%;
+    margin: 2px;
+    padding: 7px;
+    width: 48%; /* Adjust as needed */
+    margin: 5px; /* Adjust spacing between items */
+    box-sizing: border-box;
+    background-color: white;
+}
+
+.bookImgContainer {
+    display: flex;
+    justify-content: center; /* Horizontally centers the content */
+    align-items: center;
+}
+
+.bookImg {
+    width: 15rem;
+    height: 25rem;
+}
+
+button {
+    border-radius: 10px;
+    padding: 3px;
+    margin: 2px;
+    border: 2px solid lightgrey;
+}
+
+input, textarea {
+    border-radius: 15px;
+    padding: 7px;
+    border: 3px solid lightgrey;
+}
+
+.bookOptions {
+    display: flex;
+    justify-content: space-between;
+}
+
+.editButton {
+    width: 100px;
+}
+
+.deleteForm {
+    width: 40%;
+    display: flex;
+}
+
+.deleteButton {
+    margin-left: auto;
+    width: 100px;
+}
+
+.link {
+    text-decoration: none;
+}
+
+.final_info {
+    width: 100%; /* Ensure it takes up the full width */
+}
+
+.final_info_p {
+    text-align: center;
+    margin: 3px;
+}
+
+svg.bi.bi-cloud-sun.me-2{
+    margin-right: 0px !important;
+}
+
+.link1, .link2, .link3 {
+    color: black;
+}
+
+.link1:hover, .link2:hover, .link3:hover {
+    color: #85b6e5;
+}
+
+.return_to_top {
+    color: black;
+}
+.return_to_top:hover {
+    color: #e5b485;
+}
+
+@media screen and (max-width: 310px) {
+    /* Styles for screens 310px and smaller */
+    h1 {
+        font-size: 1.2rem;
+    }
+    #logo {
+        width: 20%;
+    }
+    span.fs-4 {
+        width: 100%;
+    }
+    #submitButton {
+        padding: 0px; /* Adjust padding for smaller screens */
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 373px) {
+    .headerName {
+        padding-top: 50px;
+    }
+    #profile_name {
+        font-size: 11px;
+    }
+    .word {
+        font-size: 1.4rem;
+    }
+    .dropdown button {
+        padding: 3px
+    }
+}
+
+@media (max-width: 505px) {
+    .fixed_link {
+        font-size: 0.8rem;
+    }    
+}
+
+@media (max-width: 576px) {
+    .rating_time {
+        width: 50%;
+        background-color: #85b6e5;
+        border: none;
+    }
+    .bookImg {
+        width: 12rem;
+    }
+}
+
+@media (max-width: 600px) {
+    .footer {
+        justify-content: start;
+    }
+    h1, h2, h3, h4, h5, h6 {
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+}
+
+/* Media query for single-column layout when there's only one item */
+@media screen and (max-width: 768px) {
+    .bookItem {
+      width: 100%;
+    }
+    #itemShown {
+        display: inline;
+    }
+    .todoItemList {
+        padding-bottom: 5px;
+        border-bottom: 1px solid lightgray;
+        margin: 10px;
+    }
+    .userForm {
+        width: 70%;
+    }
+}
+
+@media (max-width: 620px) {
+    .userForm {
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 1199px) {
+    .enterBookRating {
+      width: 90%;
+    }
+}

@@ -1,0 +1,39 @@
+<%- include('partials/header.ejs') %> <!-- header -->
+
+<main class="secondPage">
+    <div id="secondPage">
+        <h1>ToDo List Application</h1>
+        <!-- Form for entering new data -->
+        <form id="todoForm" action="/todoList" method="put">
+            <div id="theForm">
+                <!-- Input field for the list item, required and must contain at least one non-whitespace character -->
+                <textarea rows="1" maxlength="2048" aria-expanded="false" id="listItem" name="listItem" placeholder="Enter Your List Item" pattern=".*\S.*" autocomplete="off"></textarea>
+                <!-- Button to submit the form -->
+                <span id="submitButton" class="todoButton" type="submit">+</span>
+                <!-- Container for displaying todo items -->
+            </div>
+            <div class="todoItems">
+                <!-- List to display todo items -->
+                <br/>
+                <ul id="itemShown">
+                    <!-- Placeholder for dynamic rendering by displayValues function -->
+                </ul>
+                <!-- The modal structure -->
+            </div>
+        </form>
+    </div>
+</main>
+
+<%- include('partials/footer.ejs') %><!-- footer -->
+
+<!--
+
+1. Form: A form to enter new data with an input field and a button to submit the form.
+2. Input Field: Has required and pattern attributes to ensure it contains at least one non-whitespace character.
+3. Button: Calls the submitItem function on click.
+4. Todo Items Display: Rendered inside an unordered list (<ul>) with each item in a list item (<li>).
+5. data-index: Used for delete functionality, allowing identification of the item to be removed.
+6. forEach Loop: Iterates through todoArray, displaying each item with buttons for removal and editing.
+7. Remove Button: Calls the removeItem function, passing the index to identify the clicked button.
+
+-->
