@@ -19,7 +19,7 @@ It is built using:
 The index (Home) page:
 ![Screenshot 2024-04-25 183250](https://github.com/devondevos/new-Resume-node.js-/assets/52822153/e8000a43-c94d-4af4-b3a2-2083720cddd2)
 
-
+ 
 
 The todolistPage:
 ![Screenshot 2024-04-25 183343](https://github.com/devondevos/new-Resume-node.js-/assets/52822153/4a8433df-21c8-46e3-9e70-5d61665ac261)
