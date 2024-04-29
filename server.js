@@ -12,6 +12,19 @@ import GoogleStrategy from "passport-google-oauth2"
 import env from "dotenv";
 import helmet from 'helmet';
 
+/*
+import connectRedis from 'connect-redis';
+import redis from 'redis';
+
+i tried using them and changing my code, but it only gave me errors, so i removed it...
+
+/node_modules/connect-redis/dist/esm/index.js:16
+  let isRedis = "scanIterator" in client;
+                               ^
+
+TypeError: Cannot use 'in' operator to search for 'scanIterator' in undefined
+*/
+
 const app = express();
 env.config(); //call the function needed to make your imported secrets work
 const PORT = process.env.SYSTEM_PORT;
@@ -23,8 +36,8 @@ app.set('view engine', 'ejs');
 app.use(express.static('public', { index: false, redirect: false })); //extra security (just in case)
 app.use(helmet());
 
-app.use(
-  session({
+// Use the store in your session middleware
+app.use(session({
     secret: process.env.SESSION_SECRET, //session secret
     resave: false,
     saveUninitialized: false,
@@ -466,7 +479,6 @@ app.post('/newBook', async (req,res) => {
         if (authorName == undefined || authorName == null) {
           authorName = "Can't find"
         }
-  
         //adding the new information to the table, and returning the id, if it is a new isbn number
         const result = await db.query("insert into books_read (book_name,book_info,user_id,book_isbn,book_url,rating,entry_date,book_user_email, author_name) values ($1,$2,$3,$4,$5,$6,$7,$8,$9)",[bookTitle,bookInfo,users_id,isbn,bookCoverPage,rating,date,users_email,authorName])
         res.redirect('/home')
