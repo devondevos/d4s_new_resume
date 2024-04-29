@@ -17,28 +17,29 @@ It is built using:
   etc.
 
 The index (Home) page:
-![Screenshot 2024-04-25 183250](https://github.com/devondevos/new-Resume-node.js-/assets/52822153/e8000a43-c94d-4af4-b3a2-2083720cddd2)
+![Screenshot 2024-04-25 183250](https://github.com/devondevos/d4s_new_resume/assets/52822153/8b794386-7ec2-4182-9faf-71767341f515)
 
  
 
 The todolistPage:
-![Screenshot 2024-04-25 183343](https://github.com/devondevos/new-Resume-node.js-/assets/52822153/4a8433df-21c8-46e3-9e70-5d61665ac261)
+![Screenshot 2024-04-25 183343](https://github.com/devondevos/d4s_new_resume/assets/52822153/49a7ebf7-1fa1-4d72-aa0d-4c4ebd658820)
 
 
 
 The weatherWebsite:
-![Screenshot 2024-04-25 183435](https://github.com/devondevos/new-Resume-node.js-/assets/52822153/afcbb157-cb80-4dfb-a5c5-73d3c25b881f)
-![Screenshot 2024-04-25 183502](https://github.com/devondevos/new-Resume-node.js-/assets/52822153/08bab02c-22b1-4a93-98ba-4b284aff1f22)
+![Screenshot 2024-04-25 183435](https://github.com/devondevos/d4s_new_resume/assets/52822153/397bacc3-ad80-484f-8d3c-2173302091ee)
+![Screenshot 2024-04-25 183502](https://github.com/devondevos/d4s_new_resume/assets/52822153/fa73a107-ecb3-4c6b-8227-aadf2e4a18b7)
+
 
 
 
 The bookReview: 
-![Screenshot 2024-04-25 183022](https://github.com/devondevos/new-Resume-node.js-/assets/52822153/0baefb8e-aac9-456e-b65f-fcae2b513ac0)
-![Screenshot 2024-04-25 183825](https://github.com/devondevos/new-Resume-node.js-/assets/52822153/190baf5d-8be7-46df-addb-d260d04937dd)
+![Screenshot 2024-04-25 183022](https://github.com/devondevos/d4s_new_resume/assets/52822153/b6014bca-a8a9-4fae-8950-86942621fa9a)
+![Screenshot 2024-04-25 183825](https://github.com/devondevos/d4s_new_resume/assets/52822153/b009b5dd-ec62-439b-8eab-3da167104854)
 
 
 
 The login page:
-![Screenshot 2024-04-25 183524](https://github.com/devondevos/new-Resume-node.js-/assets/52822153/3113e87e-0856-443a-83e2-b1d165bdf7ac)
+![Screenshot 2024-04-25 183524](https://github.com/devondevos/d4s_new_resume/assets/52822153/0ef2fa9a-880c-42ad-bce2-629dd48243a4)
 
 
