@@ -4,6 +4,7 @@ to start it:
   "cd" to the location of the file,
   use "npm install" in the terminal to download the files needed to start the website,
   then use "node server.js" to start the server.
+  Then go to your browser and enter http://localhost:3000/
   
 It consists of less that 10 pages mainly the index, the todoList, weatherWebsite and bookReview projects.
 It is built using:
