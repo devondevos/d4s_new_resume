@@ -11,6 +11,7 @@ import { Strategy } from "passport-local";
 import GoogleStrategy from "passport-google-oauth2"
 import env from "dotenv";
 import helmet from 'helmet';
+import fs from 'fs'
 
 /*
 import connectRedis from 'connect-redis';
@@ -103,7 +104,22 @@ async function userInfo(id_of_user, userEmail, sort) {
   const result = await db.query(query, [id_of_user, userEmail])
   const allUserData = result.rows
   return allUserData
-  }
+}
+
+// Certificate
+app.get('/.well-known/pki-validation/9CFB6C1223C9BEEA6F4B2DB1EE1FCE31.txt', (req, res) => {
+  // Read the file asynchronously
+  fs.readFile('9CFB6C1223C9BEEA6F4B2DB1EE1FCE31.txt', 'utf8', (err, data) => {
+    if (err) {
+      // If there's an error reading the file, send an error response
+      res.status(500).send('Error reading file');
+    } else {
+      // If file is read successfully, send its content as response
+      res.send(data);
+    }
+  });
+});
+
 
 //home page
 app.get('/', async (req,res) => {
