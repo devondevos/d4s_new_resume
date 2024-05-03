@@ -29,7 +29,7 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   cookie: {
-    secure: false,
+    secure: true,
     httpOnly: true, // Restricts access to the cookie to HTTP requests only
     sameSite: process.env.SESSION_SAME_SITE, // Prevents the session cookie from being sent in cross-site requests
     maxAge: 20*60*1000, // Session expiration time in milliseconds
