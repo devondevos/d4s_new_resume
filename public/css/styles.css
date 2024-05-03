@@ -235,7 +235,7 @@ a {
     bottom: 20px;
     right: 20px;
     background-color: lightgray;
-    color: #85b6e5;
+    color: black;
     padding: 10px 20px;
     border: none;
     cursor: pointer;
@@ -741,6 +741,44 @@ svg.bi.bi-cloud-sun.me-2{
     color: #e5b485;
 }
 
+/* styles for the modal */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+  
+/* Modal Content/Box */
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+}
+  
+/* Close Button */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 40px;
+    font-weight: bold;
+}
+  
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
 @media screen and (max-width: 310px) {
     /* Styles for screens 310px and smaller */
     h1 {
@@ -775,7 +813,7 @@ svg.bi.bi-cloud-sun.me-2{
 
 @media (max-width: 505px) {
     .fixed_link {
-        font-size: 0.8rem;
+        font-size: 1rem;
     }    
 }
 

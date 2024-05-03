@@ -3,7 +3,6 @@ import bodyParser from 'body-parser';
 import rateLimit from 'express-rate-limit';
 import axios from 'axios';
 import cors from 'cors';
-import session from 'express-session';
 import pg from 'pg';
 import bcrypt from 'bcrypt';
 import passport from "passport";
@@ -11,20 +10,7 @@ import { Strategy } from "passport-local";
 import GoogleStrategy from "passport-google-oauth2"
 import env from "dotenv";
 import helmet from 'helmet';
-import fs from 'fs'
-
-/*
-import connectRedis from 'connect-redis';
-import redis from 'redis';
-
-i tried using them and changing my code, but it only gave me errors, so i removed it...
-
-/node_modules/connect-redis/dist/esm/index.js:16
-  let isRedis = "scanIterator" in client;
-                               ^
-
-TypeError: Cannot use 'in' operator to search for 'scanIterator' in undefined
-*/
+import session from 'express-session';
 
 const app = express();
 env.config(); //call the function needed to make your imported secrets work
@@ -39,19 +25,16 @@ app.use(helmet());
 
 // Use the store in your session middleware
 app.use(session({
-    secret: process.env.SESSION_SECRET, //session secret
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      httpOnly: true, // Restricts access to the cookie to HTTP requests only
-      sameSite: process.env.SESSION_SAME_SITE, // Prevents the session cookie from being sent in cross-site requests
-      maxAge: 20*60*1000, // Session expiration time in milliseconds
-    },
-  })
-); //stores the info of the user
-
-app.use(passport.initialize()); //passport is needed for oauth2
-app.use(passport.session());
+  secret: process.env.SESSION_SECRET, //session secret
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: false,
+    httpOnly: true, // Restricts access to the cookie to HTTP requests only
+    sameSite: process.env.SESSION_SAME_SITE, // Prevents the session cookie from being sent in cross-site requests
+    maxAge: 20*60*1000, // Session expiration time in milliseconds
+  },
+})); //stores the info of the user
 
 const db = new pg.Client({
   user: process.env.PG_USER,
@@ -60,7 +43,7 @@ const db = new pg.Client({
   password: process.env.PG_PASSWORD,
   port: process.env.PG_PORT,
 });
-db.connect(); //database information
+db.connect()
 
 //security
 app.use(cors({
@@ -86,6 +69,9 @@ app.use(async (req, res, next) => {
   }
 });
 
+app.use(passport.initialize()); //passport is needed for oauth2
+app.use(passport.session());
+
 //generates a random password for each user
 function generateRandomString(length) {
   const characters = process.env.DATABASE_RANDOM;
@@ -106,77 +92,75 @@ async function userInfo(id_of_user, userEmail, sort) {
   return allUserData
 }
 
-// Certificate
-app.get('/.well-known/pki-validation/9CFB6C1223C9BEEA6F4B2DB1EE1FCE31.txt', (req, res) => {
-  // Read the file asynchronously
-  fs.readFile('9CFB6C1223C9BEEA6F4B2DB1EE1FCE31.txt', 'utf8', (err, data) => {
-    if (err) {
-      // If there's an error reading the file, send an error response
-      res.status(500).send('Error reading file');
-    } else {
-      // If file is read successfully, send its content as response
-      res.send(data);
-    }
-  });
+// Home page
+app.get('/', async (req, res) => {
+  let userName = req.session.user || undefined; // Calls the user info stored in the session, when you log in
+  // Render the page without the modal
+  res.render('index.ejs', { userHeader: userName });
 });
 
 
-//home page
-app.get('/', async (req,res) => {
-  let userName = req.session.user //calls the user info stored in the session, when you log in
-  res.render('index.ejs', {userHeader:userName})
-})
-
 //first page
-
-// Array to store todo items
-let todoArray = [];
 
 // Handle PUT requests to '/editItem' endpoint
 app.put('/editItem', (req, res) => {
   const indexToEdit = req.body.index;
   const updatedItem = req.body.updatedItem;
+  let todoArray = req.session.todoArray || []
 
   // Ensure the index is valid
   if (indexToEdit >= 0 && indexToEdit < todoArray.length) {
     // Update the todoArray on the server side
     todoArray[indexToEdit] = updatedItem;
-    // Set the Content-Type header to indicate JSON
-    res.setHeader('Content-Type', 'application/json');
+    req.session.todoArray = todoArray
     // Send a JSON response with the updated todoArray to the UI
     res.json({ values: todoArray });
   }
-});
-
-// Handle POST requests to '/form' endpoint
-app.post('/form', (req, res) => {
-  // Retrieve the value of the 'listItem' field from the form
-  const item = req.body.listItem;
-  // Add the item to the todoArray
-  todoArray.push(item);
-  
-  // Send a JSON response with the updated todoArray to the client
-  res.json({ values: todoArray });
 });
 
 // Handle DELETE requests to '/removeItem' endpoint
 app.delete('/removeItem', (req, res) => {
   // Retrieve the index of the item to be removed from the request body
   const indexToRemove = req.body.index;
+  console.log('index: ',indexToRemove)
+  let todoArray = req.session.todoArray || []
+  console.log('delete todoArray: ',todoArray)
 
   // Remove the item from the todoArray if the index is valid
   if (indexToRemove >= 0 && indexToRemove < todoArray.length) {
     todoArray.splice(indexToRemove, 1);
   }
 
+  req.session.todoArray = todoArray
+  console.log('new todoArray: ',todoArray)
+  console.log('new req.session.todoArray: ',req.session.todoArray)
+  // Send a JSON response with the updated todoArray to the client
+  res.json({ values: todoArray });
+});
+
+// Handle POST requests to '/form' endpoint
+app.post('/form', (req, res) => {
+  // Retrieve the value of the 'listItem' field from the form
+  const item = req.body.listItem;
+  // Array to store todo items temporarily
+  let todoArray = req.session.todoArray || [];
+  console.log('post todoArray (1): ',todoArray)
+  // Add the item to the todoArray
+  todoArray.push(item);
+  console.log('push todoArray: ',todoArray)
+  //adding the temporary information of the todoArray to the session
+  req.session.todoArray = todoArray
+  console.log('req.session (todoArray): ',req.session)
   // Send a JSON response with the updated todoArray to the client
   res.json({ values: todoArray });
 });
 
 //where the info is showed to the client regarding the todoList (im using ajax for the todoList, instead of the database)
 app.get('/todoList', (req,res) => {
-  let userName = req.session.user
-  res.render('project_1', { todoArray, userHeader:userName })
+  let userName = req.session.user || undefined
+  let todoArray = req.session.todoArray || []
+  console.log('req.session.id: ',req.session.id)
+  res.render('project_1', { todoArray, userHeader:userName });
 })
 
 //second page
@@ -186,32 +170,45 @@ const limiter = rateLimit({
   max: 10, // limit each IP to 10 requests per windowMs
 });
 
-app.get('/weatherApp', limiter, async (req, res) => {
+app.get('/weatherApp', async (req, res) => {
   try {
-    if (req.rateLimit.remaining === 0 || req.rateLimit.remaining === 1) {
-      // Rate limit exceeded, redirect to homepage
-      res.redirect('/');
-      return; // Don't proceed further
-    }
+    if (req.isAuthenticated()) {
     let userName = req.session.user;
+    console.log('userName: ',userName)
+
+    let userCount = await db.query('SELECT weathercount, time_checked FROM users WHERE user_name = $1', [userName.user_name]);
+
+    const currentDateTime = new Date();
+    const lastCheckedDate = new Date(userCount.rows[0].time_checked);
+
+    // Check if 24 hours have passed since the last check
+    if (currentDateTime - lastCheckedDate >= 24 * 60 * 60 * 1000) {
+      // Reset the count and update the lastChecked date
+      await db.query('UPDATE users SET weathercount = $1, time_checked = $2 WHERE user_name = $3', [10, currentDateTime, userName.user_name]);
+    }
     res.render('project_2.ejs', { data: "Waiting for information", userHeader: userName });
+  } else {
+    res.redirect('/?showAlert=true')
+  }
   } catch (error) {
     console.error("Error rendering weatherApp page:", error);
     res.redirect('/'); // Redirect to homepage in case of error
   }
 });
 
-app.post('/weatherApp', async (req,res) => {
+app.post('/weatherApp',limiter, async (req,res) => {
   try {
+    console.log("Rate limit remaining:", req.rateLimit.remaining);
+    console.log("Time until rate limit reset (ms):", req.rateLimit.resetTime);
     let userName = req.session.user
+    console.log('userName (weatherApp post: )',userName)
     //getting the location and amount of days, the user entered
     const userAddress = req.body.userAddress;
     const userSuburb = req.body.userSuburb;
     let userDays = req.body.userDays;
-    if (userDays > 5) {
-      userDays = 5
+    if (userDays > 7) {
+      userDays = 7
     }
-
     //trying to find the location of the user to render the latitude and longitude to the API_URL
     const locationAPI = `${process.env.WEATHERAPP_LOCATION}=${userAddress}+${userSuburb}${process.env.WEATHERAPP_5}=${process.env.WEATHERAPP_6}`
     const userLocation = await axios.get(locationAPI)
@@ -249,7 +246,11 @@ app.post('/weatherApp', async (req,res) => {
           temperature_2m: temperature_2m[index],
         };
       });
-            
+
+      let remainingCount = req.rateLimit.remaining;
+      let timeChecked = new Date(); // Current time
+      await db.query('UPDATE users SET weathercount = $1, time_checked = $2 WHERE user_name = $3', [remainingCount, timeChecked, userName.user_name]);
+
       res.render('project_2.ejs', {userHeader:userName, timeZone:timeZone, data:weatherApp, currentTimeAndDay:currentTimeAndDay.toLocaleDateString('en-US', {weekday: 'long', hour: 'numeric', minute:'numeric', hour12:false})})
     } else {
       //if the location is not found
@@ -269,6 +270,7 @@ app.get("/bookReview",  async (req, res) => {
     if (req.isAuthenticated()) {
       res.redirect('/home')
     } else {
+      console.log('session data: ',req.session)
       let sort = req.session.sort
       let availableBooks
       if (sort !== undefined) {
@@ -366,16 +368,34 @@ app.get("/login", (req, res) => {
 });
   
 app.get("/register", (req, res) => {
+  // Render the page without the modal
   res.render("project_3/register.ejs");
 });
   
 app.get("/logout", (req, res) => {
-  req.logout(function (err) {
-    if (err) {
-      return next(err);
-    }
-    res.redirect("/bookReview");
-  });
+  try { 
+    req.session.destroy((err) => {
+      if (err) {
+        req.logout(function (err) {
+          if (err) {
+            return next(err);
+          }
+        });
+        console.error('Error destroying session:', err);
+      } else {
+        req.logout(function (err) {
+          if (err) {
+            return (err);
+          }
+        });
+        console.log('Session destroyed, user logged out');
+      }
+    });
+    res.redirect('/login')
+  } catch (error) {
+    console.log('error logging out: ', error)
+    res.redirect('/login')
+  }
 });
   
 app.post('/changeUser', (req,res) => {
@@ -431,9 +451,9 @@ app.post('/deleteUser', async (req,res) => {
           });
         }
       });
-      res.redirect('/bookReview')
+      res.redirect('/')
     } else {
-      res.redirect('/bookReview')
+      res.redirect('/')
     }
   } catch (error) {
     console.error('Error deleting user: ',error)
@@ -586,12 +606,13 @@ app.post("/register", async (req, res) => {
           console.error("Error hashing password (local:", err);
         } else {
           const result = await db.query(
-            "INSERT INTO users (user_name, password, username) VALUES ($1, $2, $3) RETURNING *",
-            [email, hash, userName]
+            "INSERT INTO users (user_name, password, username, weathercount) VALUES ($1, $2, $3, $4) RETURNING *",
+            [email, hash, userName, 10]
           );
           const user = result.rows[0];
           req.login(user, (err) => {
-            res.redirect("/home");
+            req.session.user = user
+            res.redirect("/");
           });
         }
       });
@@ -601,18 +622,17 @@ app.post("/register", async (req, res) => {
   }
 });
   
-const scopes = ["profile", "email"]
 app.get(
   "/auth/google",
   passport.authenticate("google", {
-    scope: scopes,
+    scope: ["profile", "email"],
   })
 );
   
 app.get(
   "/auth/google/home",
   passport.authenticate("google", {
-    successRedirect: "/home",
+    successRedirect: "/",
     failureRedirect: "/login",
   })
 );
@@ -620,7 +640,7 @@ app.get(
 app.post(
   "/login",
   passport.authenticate("local", {
-    successRedirect: "/home",
+    successRedirect: "/",
     failureRedirect: "/login",
   })
 );
@@ -685,39 +705,46 @@ passport.use(
                   return cb(err)
                 } else {
                   const newUser = await db.query(
-                    "INSERT INTO users (user_name, password, username) VALUES ($1, $2, $3)",
-                    [profile.email, hash, profile.displayName]
+                    "INSERT INTO users (user_name, password, username, weathercount) VALUES ($1, $2, $3, $4)",
+                    [profile.email, hash, profile.displayName, 10]
                   );
-                  return cb(null, newUser.rows[0]);
+                  console.log('newUser: ',newUser[0].id)
+                  return cb(null, newUser.rows[0].id);
                 }
               })
             }
           } else {
-            return cb(null, result.rows[0]);
+            console.log('already there: ',result.rows[0].id)
+            return cb(null, result.rows[0].id);
           }
         })
       } catch (err) {
+        console.log('error by google')
         return cb(err);
       }
   })
 )
 
-passport.serializeUser((user, cb) => {
-  cb(null, user.id); // Assuming user object has an `id` property
+passport.serializeUser((profile, cb) => {
+  console.log('profile (serialization): ',profile)
+  cb(null, profile); // Assuming user object has an `id` property
 });
 
-passport.deserializeUser(async (id, cb) => {
+passport.deserializeUser(async (profile, cb) => {
+  console.log('called me')
   try {
     // Convert the user ID to a number (if it's not already)
-    const userId = Number(id);
+    const userId = Number(profile);
     
     // Query the database for the user with the specified ID
     const result = await db.query("SELECT * FROM users WHERE id = $1", [userId]);
+    console.log('result: ',result.rows)
 
     // Check if a user was found
     if (result.rows.length > 0) {
       // If a user was found, return the first user object
       const user = result.rows[0];
+      console.log('user (deserialization): ',user)
       cb(null, user);
     } else {
       // If no user was found, return an error
@@ -725,6 +752,7 @@ passport.deserializeUser(async (id, cb) => {
     }
   } catch (err) {
     // If an error occurred during deserialization, return the error
+    console.err('error occurred during deserialization')
     cb(err);
   }
 });

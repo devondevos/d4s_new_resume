@@ -1,3 +1,7 @@
+This is my thoughts for my project, anything that I want to do or thoughts, I add it here to remind me
+.......................................................................................................
+
+
 .time to make the final product for now
 
 .also add a monologue for why you used axaj and not postreSQL
@@ -46,3 +50,34 @@ finished (return maybe when i know more, but now my code don't work anymore-corr
 
 .maybe later find out a way to make sure if the user has multiple google accounts linked, that it works,
  because now, it doesnt
+
+..add error: SSL/TLS required on the databases linked to the on render
+finished
+
+.add all the projects to the database, so that it is not stored on the browser,
+ because todoList is global (everyone's data is saved) and weatherApp is not opening, 
+ maybe if in a database.
+ finished
+
+..everytime the user searches (weatherApp), increment the totalNum (db), and if it is 10, redirect to '/'
+  finished
+
+..(the browser is not picking up if it is one or mutiple users, so add them all to the db for session
+  or find a way for the session to work even if they aren't logged in, so the borwser can save their info
+  to determine if they are a user, safely)
+  finished (but check when deployed)
+  
+..make an if/for statement, that handles that, and every 24 hours, reset the totalNum (db)
+  waiting for deployment
+
+...add the todoList to the session data, so it is not global
+   waiting for deployment
+
+....check why the google login system ('google Strategy' only) is not working correctly, if not, remove it
+    
+
+.....add an alert that says that the weatherApp and bookReview is only available after logging in,
+     customize the alert, 
+     finished
+
+......also the delete alert of bookReview, find out about the rain.

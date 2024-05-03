@@ -2,9 +2,24 @@ const toggleDropdown = () => {
     $('.dropdown').toggleClass('active');
 };
 
+$(document).ready(function() {
+    // Check if the showAlert query parameter is present in the URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const showAlert = urlParams.get('showAlert');
+    
+    // Check if the user is not logged in and showAlert is true
+    if (showAlert == "true") {
+        // Show the modal
+        $('#myModal').css('display', 'block');
+    }
+    
+    // Close the modal when clicking on the close button or outside the modal
+    $('.close, .modal').click(function() {
+        $('#myModal').css('display', 'none');
+    });
+});
+
 /*project 1 */
-// Array to store todo items
-let todoArray = [];
 
 // Function to handle the form submission when adding a new item
 const submitItem = (event) => {
@@ -29,6 +44,7 @@ const submitItem = (event) => {
                 // Callback function called on successful response from the server
                 //displayValues and values are created below
                 displayValues(data.values);  // Display the updated list of values
+                console.log('data.values: ',data.values)
                 // Clear the input field after successful submission
                 $("#listItem").val('');
                 // Reset the textarea to a single row after form submission
@@ -44,7 +60,7 @@ const submitItem = (event) => {
 
 // Function to display values in the list
 const displayValues = (values) => {
-    // Clear the values list
+    // Clear the existing items in the list
     $('#itemShown').empty();
     // Display each value in the list
     values.forEach(function (todoItem, index) {
@@ -179,99 +195,101 @@ $(document).ready(function () { //just here to make sure that there is no errors
     });
 
     // Parse the JSON string back to an array
-const data = JSON.parse($('.weatherInfo').text() || "[]");
-console.log(data)
-if (data.length > 0) {
-    createChart(data);
+    const data = JSON.parse($('.weatherInfo').text() || "[]");
+    console.log(data)
+    if (data.length > 0) {
+        createChart(data);
 
-    function createChart(data) {
+        function createChart(data) {
         // Get current date and time
-        const now = new Date();
-        const currentTime = `${String(now.getHours()).padStart(2, '0')}:00`;
-        const shortToday = now.toLocaleString('en-us', { weekday: 'short' });
+            const now = new Date();
+            const currentTime = `${String(now.getHours()).padStart(2, '0')}:00`;
+            const shortToday = now.toLocaleString('en-us', { weekday: 'short' });
 
-        // Group the data by day
-        const groupedData = {};
-        data.forEach(item => {
-            if (!groupedData[item.date]) {
-                groupedData[item.date] = [];
-            }
-            groupedData[item.date].push({ time: item.time, temperature_2m: item.temperature_2m });
-        });
-
-        // Prepare the data
-        const labels = [];
-        const temperatures = [];
-
-        let hasCurrentTimePassed = false;
-        Object.keys(groupedData).forEach(day => {
-            const dayData = groupedData[day];
-            dayData.forEach((item, index) => {
-                if (!hasCurrentTimePassed) {
-                    if (day === shortToday && item.time < currentTime) {
-                        return; // Skip times that have passed today
-                    }
-                    hasCurrentTimePassed = true;
+            // Group the data by day
+            const groupedData = {};
+            data.forEach(item => {
+                if (!groupedData[item.date]) {
+                    groupedData[item.date] = [];
                 }
-                if (index === 1) {
-                    labels.push(`${day.slice(0, 3)} - ${item.time}`);
-                } else {
-                    labels.push(item.time);
-                }
-                temperatures.push(item.temperature_2m);
+                groupedData[item.date].push({ time: item.time, temperature_2m: item.temperature_2m });
             });
-        });
+
+            // Prepare the data
+            const labels = [];
+            const temperatures = [];
+
+            let hasCurrentTimePassed = false;
+            Object.keys(groupedData).forEach(day => {
+                const dayData = groupedData[day];
+                dayData.forEach((item, index) => {
+                    if (!hasCurrentTimePassed) {
+                        if (day === shortToday && item.time < currentTime) {
+                            return; // Skip times that have passed today
+                        }
+                        hasCurrentTimePassed = true;
+                    }
+                    if (index === 1) {
+                        labels.push(`${day.slice(0, 3)} - ${item.time}`);
+                    } else if (index === 2) { 
+                        labels.push(`${day.slice(0, 3)} - ${item.time}`);
+                    } else {        
+                        labels.push(item.time);
+                    }
+                    temperatures.push(item.temperature_2m);
+                });
+            });
         
-        // Create the chart
-        const ctx = document.getElementById('weatherChart').getContext('2d');
-        const temperatureChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Temperature (°C)',
-                    data: temperatures,
-                    borderColor: '#e5b485',
-                    borderWidth: 2,
-                    backgroundColor: 'rgba(98, 64, 114, 0.3)',
-                    fill: true,
-                    pointRadius: 0,
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: false,
-                        ticks: {
-                            font: {
-                                size: 10, // Change the font size of the y-axis ticks
-                            },
-                            color: 'black'
+            // Create the chart
+            const ctx = document.getElementById('weatherChart').getContext('2d');
+            const temperatureChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Temperature (°C)',
+                        data: temperatures,
+                        borderColor: '#e5b485',
+                        borderWidth: 2,
+                        backgroundColor: 'rgba(98, 64, 114, 0.3)',
+                        fill: true,
+                        pointRadius: 0,
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            ticks: {
+                                font: {
+                                    size: 10, // Change the font size of the y-axis ticks
+                                },
+                                color: 'black'
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                font: {
+                                    size:8, // Change the font size of the x-axis ticks
+                                },
+                                color: 'black'
+                            }
                         }
                     },
-                    x: {
-                        ticks: {
-                            font: {
-                                size:8, // Change the font size of the x-axis ticks
-                            },
-                            color: 'black'
-                        }
-                    }
-                },
-                plugins: {
-                    legend: {
-                        labels: {
-                            font: {
-                                size: 10 // Change the font size of the legend
-                            },
-                            color: 'black'
+                    plugins: {
+                        legend: {
+                            labels: {
+                                font: {
+                                    size: 10 // Change the font size of the legend
+                                },
+                                color: 'black'
+                            }
                         }
                     }
                 }
-            }
-        });
+            });
+        }
     }
-}
 
 })
 
@@ -293,54 +311,54 @@ const realDate = new Date().getFullYear()
 $('#theYear').text(realDate)
 
 //the dropdown of the login and the projects
-$('.usersLogin').click(userDropdown)
 function userDropdown() {
-  $('.user-dropdown').toggle();
+    $('.user-dropdown').toggle();
 }
+$('.usersLogin').click(userDropdown)
 
-$('.projectdropdown').click(projectsDropdown)
 function projectsDropdown() {
-  $('.projects-dropdown').toggle();
+    $('.projects-dropdown').toggle();
 }
+$('.projectdropdown').click(projectsDropdown)
 
 // Click event listener for the document body to close dropdowns when clicking outside
 $(document.body).on('click', function(event) {
-  // Check if the clicked element is not within the user dropdown or its trigger element
-  if (!$(event.target).closest('.user-dropdown, .usersLogin').length) {
-    // Close the user dropdown if it's open
-    $('.user-dropdown').hide();
-  }
-  // Check if the clicked element is not within the projects dropdown or its trigger element
-  if (!$(event.target).closest('.projects-dropdown, .projectdropdown').length) {
-    // Close the projects dropdown if it's open
-    $('.projects-dropdown').hide();
-  }
+    // Check if the clicked element is not within the user dropdown or its trigger element
+    if (!$(event.target).closest('.user-dropdown, .usersLogin').length) {
+        // Close the user dropdown if it's open
+        $('.user-dropdown').hide();
+    }
+    // Check if the clicked element is not within the projects dropdown or its trigger element
+    if (!$(event.target).closest('.projects-dropdown, .projectdropdown').length) {
+        // Close the projects dropdown if it's open
+        $('.projects-dropdown').hide();
+    }
 });
 
 
 function confirmDelete1() {
-  // Display a confirmation dialog
-  var confirmation = confirm('Are you sure you want to delete this user?');
+    // Display a confirmation dialog
+    var confirmation = confirm('Are you sure you want to delete this user?');
 
-  // If confirmed, submit the form
-  if (confirmation) {
-      return true; // Allow form submission
-  } else {
-      return false; // Prevent form submission
-  }
+    // If confirmed, submit the form
+    if (confirmation) {
+        return true; // Allow form submission
+    } else {
+        return false; // Prevent form submission
+    }
 }
 $('.confirmDelete').click(confirmDelete1)
 
 function confirmDelete2() {
-  // Display a confirmation dialog
-  var confirmation = confirm('Are you sure you want to delete this book?');
+    // Display a confirmation dialog
+    var confirmation = confirm('Are you sure you want to delete this book?');
 
-  // If confirmed, submit the form
-  if (confirmation) {
-      return true; // Allow form submission
-  } else {
-      return false; // Prevent form submission
-  }
+    // If confirmed, submit the form
+    if (confirmation) {
+        return true; // Allow form submission
+    } else {
+        return false; // Prevent form submission
+    }
 }
 $('.deleteButton').click(confirmDelete2)
 
@@ -402,21 +420,21 @@ $(document).ready(function() {
 
 //function for the stars
 function starsFunction(starsTotal) {
-  //just in case, someone adds a decimal number
-  const wholeNum = Math.floor(starsTotal)
-  //just in case someone puts a number higher than 5
-  if (wholeNum > 5) {
-    wholeNum = 5
-  }
-  let starNum = ''
-  for (let i = 0; i < wholeNum; i++) {
-      starNum += '★'
-  }
-  const emptyStars = 5 - starNum.length
-  for (let i = 0; i < emptyStars; i++) {
-      starNum += '☆';
-  }
-  return starNum
+    //just in case, someone adds a decimal number
+    const wholeNum = Math.floor(starsTotal)
+    //just in case someone puts a number higher than 5
+    if (wholeNum > 5) {
+        wholeNum = 5
+    }
+    let starNum = ''
+    for (let i = 0; i < wholeNum; i++) {
+        starNum += '★'
+    }
+    const emptyStars = 5 - starNum.length
+    for (let i = 0; i < emptyStars; i++) {
+        starNum += '☆';
+    }
+    return starNum
 }
 
 // Select all elements with the class '.bookRating'

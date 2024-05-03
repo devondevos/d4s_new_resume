@@ -10,21 +10,19 @@
     "ejs": "^3.1.9",
     "express": "^4.19.2",
     "express-rate-limit": "^7.1.5",
-    "express-session": "^1.17.3",
-    "fs": "^0.0.1-security",
+    "express-session": "^1.18.0",
     "helmet": "^7.1.0",
     "node-fetch": "^3.3.2",
     "passport": "^0.7.0",
     "passport-google-oauth2": "^0.2.0",
     "passport-local": "^1.0.0",
-    "pg": "^8.11.5",
-    "redis": "^4.6.13"
+    "pg": "^8.11.5"
   },
   "name": "my-resume",
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "debug": "node --inspect server.js"
   },
   "type": "module",
   "keywords": [],

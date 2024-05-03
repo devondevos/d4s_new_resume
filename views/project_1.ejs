@@ -4,7 +4,7 @@
     <div id="secondPage">
         <h1>ToDo List Application</h1>
         <!-- Form for entering new data -->
-        <form id="todoForm" action="/todoList" method="put">
+        <form id="todoForm" action="/todoList" method="post">
             <div id="theForm">
                 <!-- Input field for the list item, required and must contain at least one non-whitespace character -->
                 <textarea rows="1" maxlength="2048" aria-expanded="false" id="listItem" name="listItem" placeholder="Enter Your List Item" pattern=".*\S.*" autocomplete="off"></textarea>
@@ -12,15 +12,15 @@
                 <span id="submitButton" class="todoButton" type="submit">+</span>
                 <!-- Container for displaying todo items -->
             </div>
-            <div class="todoItems">
-                <!-- List to display todo items -->
-                <br/>
-                <ul id="itemShown">
-                    <!-- Placeholder for dynamic rendering by displayValues function -->
-                </ul>
-                <!-- The modal structure -->
-            </div>
         </form>
+        <div class="todoItems">
+            <!-- List to display todo items -->
+            <br/>
+            <ul id="itemShown">
+                <!-- Placeholder for dynamic rendering by displayValues function -->
+            </ul>
+            <!-- The modal structure -->
+        </div>
     </div>
 </main>
 
