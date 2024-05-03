@@ -10,7 +10,23 @@ import { Strategy } from "passport-local";
 import GoogleStrategy from "passport-google-oauth2"
 import env from "dotenv";
 import helmet from 'helmet';
+import fs from 'fs';
 import session from 'express-session';
+import Redis from 'ioredis';
+import connectRedis from 'connect-redis';
+
+/*
+import connectRedis from 'connect-redis';
+import redis from 'redis';
+
+i tried using them and changing my code, but it only gave me errors, so i removed it...
+
+/node_modules/connect-redis/dist/esm/index.js:16
+  let isRedis = "scanIterator" in client;
+                               ^
+
+TypeError: Cannot use 'in' operator to search for 'scanIterator' in undefined
+*/
 
 const app = express();
 env.config(); //call the function needed to make your imported secrets work
@@ -22,6 +38,8 @@ app.set('views','views');
 app.set('view engine', 'ejs');
 app.use(express.static('public', { index: false, redirect: false })); //extra security (just in case)
 app.use(helmet());
+// Enable trust proxy
+//app.set('trust proxy', true);
 
 // Use the store in your session middleware
 app.use(session({
@@ -29,12 +47,15 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   cookie: {
-    secure: true,
+    secure: false,
     httpOnly: true, // Restricts access to the cookie to HTTP requests only
     sameSite: process.env.SESSION_SAME_SITE, // Prevents the session cookie from being sent in cross-site requests
     maxAge: 20*60*1000, // Session expiration time in milliseconds
   },
 })); //stores the info of the user
+
+app.use(passport.initialize()); //passport is needed for oauth2
+app.use(passport.session());
 
 const db = new pg.Client({
   user: process.env.PG_USER,
@@ -68,9 +89,6 @@ app.use(async (req, res, next) => {
     next(error); // Forward the error to the error handling middleware
   }
 });
-
-app.use(passport.initialize()); //passport is needed for oauth2
-app.use(passport.session());
 
 //generates a random password for each user
 function generateRandomString(length) {
@@ -270,7 +288,7 @@ app.get("/bookReview",  async (req, res) => {
     if (req.isAuthenticated()) {
       res.redirect('/home')
     } else {
-      console.log('session data: ',req.session)
+      console.log('session data: ',req.user)
       let sort = req.session.sort
       let availableBooks
       if (sort !== undefined) {
@@ -632,7 +650,7 @@ app.get(
 app.get(
   "/auth/google/home",
   passport.authenticate("google", {
-    successRedirect: "/",
+    successRedirect: "/home",
     failureRedirect: "/login",
   })
 );
@@ -640,7 +658,7 @@ app.get(
 app.post(
   "/login",
   passport.authenticate("local", {
-    successRedirect: "/",
+    successRedirect: "/home",
     failureRedirect: "/login",
   })
 );
@@ -661,7 +679,7 @@ passport.use(
             return cb(err);
           } else {
             if (valid) {
-              return cb(null, user);
+              return cb(null, user.id);
             } else {
               return cb(null, false);
             }
@@ -725,16 +743,16 @@ passport.use(
   })
 )
 
-passport.serializeUser((profile, cb) => {
-  console.log('profile (serialization): ',profile)
-  cb(null, profile); // Assuming user object has an `id` property
+passport.serializeUser((user, cb) => {
+  console.log('user (serialization): ',user)
+  cb(null, user); // Assuming user object has an `id` property
 });
 
-passport.deserializeUser(async (profile, cb) => {
+passport.deserializeUser(async (user, cb) => {
   console.log('called me')
   try {
     // Convert the user ID to a number (if it's not already)
-    const userId = Number(profile);
+    const userId = Number(user);
     
     // Query the database for the user with the specified ID
     const result = await db.query("SELECT * FROM users WHERE id = $1", [userId]);
