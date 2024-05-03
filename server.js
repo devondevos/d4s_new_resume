@@ -10,23 +10,7 @@ import { Strategy } from "passport-local";
 import GoogleStrategy from "passport-google-oauth2"
 import env from "dotenv";
 import helmet from 'helmet';
-import fs from 'fs';
 import session from 'express-session';
-import Redis from 'ioredis';
-import connectRedis from 'connect-redis';
-
-/*
-import connectRedis from 'connect-redis';
-import redis from 'redis';
-
-i tried using them and changing my code, but it only gave me errors, so i removed it...
-
-/node_modules/connect-redis/dist/esm/index.js:16
-  let isRedis = "scanIterator" in client;
-                               ^
-
-TypeError: Cannot use 'in' operator to search for 'scanIterator' in undefined
-*/
 
 const app = express();
 env.config(); //call the function needed to make your imported secrets work
