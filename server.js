@@ -1,6 +1,5 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import rateLimit from 'express-rate-limit';
 import axios from 'axios';
 import cors from 'cors';
 import pg from 'pg';
@@ -10,6 +9,7 @@ import { Strategy } from "passport-local";
 import env from "dotenv";
 import helmet from 'helmet';
 import session from 'express-session';
+/*import rateLimit from 'express-rate-limit';*/
 
 const app = express();
 env.config(); //call the function needed to make your imported secrets work
@@ -83,10 +83,10 @@ function generateRandomString(length) {
 
 //second page
 //limiter for requests, so i don't get penalized (for second page)
-const limiter = rateLimit({
+/*const limiter = rateLimit({
   windowMs: 24 * 60 * 60 * 1000, // 24 hour window
   max: 10, // limit each IP to 10 requests per windowMs
-});
+});*/
 
 //third page middleware
 //calls the info from the books database, and sorts it
