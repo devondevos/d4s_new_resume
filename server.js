@@ -70,7 +70,7 @@ app.use(async (req, res, next) => {
   }
 });
 
-//generates a random password for each user
+/*generates a random password for each user
 function generateRandomString(length) {
   const characters = process.env.DATABASE_RANDOM;
   let result = '';
@@ -79,7 +79,14 @@ function generateRandomString(length) {
       result += characters.charAt(Math.floor(Math.random() * charactersLength));
   }
   return result;
-}
+}*/
+
+//second page
+//limiter for requests, so i don't get penalized (for second page)
+const limiter = rateLimit({
+  windowMs: 24 * 60 * 60 * 1000, // 24 hour window
+  max: 10, // limit each IP to 10 requests per windowMs
+});
 
 //third page middleware
 //calls the info from the books database, and sorts it
@@ -161,13 +168,6 @@ app.get('/todoList', (req,res) => {
   res.render('project_1', { todoArray, userHeader:userName });
 })
 
-//second page
-//limiter for requests, so i don't get penalized (for second page)
-const limiter = rateLimit({
-  windowMs: 24 * 60 * 60 * 1000, // 24 hour window
-  max: 10, // limit each IP to 10 requests per windowMs
-});
-
 app.get('/weatherApp', async (req, res) => {
   try {
     if (req.isAuthenticated()) {
@@ -196,10 +196,7 @@ app.get('/weatherApp', async (req, res) => {
 
 app.post('/weatherApp',limiter, async (req,res) => {
   try {
-    console.log("Rate limit remaining:", req.rateLimit.remaining);
-    console.log("Time until rate limit reset (ms):", req.rateLimit.resetTime);
     let userName = req.session.user
-    console.log('userName (weatherApp post: )',userName)
     //getting the location and amount of days, the user entered
     const userAddress = req.body.userAddress;
     const userSuburb = req.body.userSuburb;
