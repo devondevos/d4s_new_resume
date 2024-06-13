@@ -196,6 +196,7 @@ app.get('/weatherApp', async (req, res) => {
 
 app.post('/weatherApp', async (req,res) => {
   try {
+    console.log('part one')
     let userName = req.session.user
     //getting the location and amount of days, the user entered
     const userAddress = req.body.userAddress;
@@ -204,16 +205,19 @@ app.post('/weatherApp', async (req,res) => {
     if (userDays > 7) {
       userDays = 7
     }
+    console.log('part 2')
     //trying to find the location of the user to render the latitude and longitude to the API_URL
     const locationAPI = `${process.env.WEATHERAPP_LOCATION}=${userAddress}+${userSuburb}${process.env.WEATHERAPP_5}=${process.env.WEATHERAPP_6}`
     const userLocation = await axios.get(locationAPI)
 
+    console.log('part 2.1')
     //if there is data sent to the api
     if (userLocation.data && userLocation.data.length > 0) {
       //assigning the appropriate latitude and longitude values
       const userLatitude = userLocation.data[0].lat;
       const userLongitude = userLocation.data[0].lon;
 
+      console.log('part 2.2')
       //the latitude and longitude is returned from the locationApi, from the location the user entered in
       const API_URL = `${process.env.WEATHERAPP_LATITUDE}=${userLatitude}${process.env.WEATHERAPP_1}=${userLongitude}${process.env.WEATHERAPP_2}=${process.env.WEATHERAPP_3}=${process.env.WEATHERAPP_4}=${userDays}`;
       //returning the api with the details from the user
@@ -223,6 +227,7 @@ app.post('/weatherApp', async (req,res) => {
       const temperature_2m = response.data.hourly.temperature_2m;
       const timeZone = response.data.timezone;
 
+      console.log('part 2.3')
       //displaying the date and time on the client side from the api's
       const currentTimeAndDay = new Date();
 
@@ -246,6 +251,7 @@ app.post('/weatherApp', async (req,res) => {
       let timeChecked = new Date(); // Current time
       await db.query('UPDATE users SET weathercount = $1, time_checked = $2 WHERE user_name = $3', [remainingCount, timeChecked, userName.user_name]);
       */
+     console.log('part 3')
       res.render('project_2.ejs', {userHeader:userName, timeZone:timeZone, data:weatherApp, currentTimeAndDay:currentTimeAndDay.toLocaleDateString('en-US', {weekday: 'long', hour: 'numeric', minute:'numeric', hour12:false})})
     } else {
       //if the location is not found
