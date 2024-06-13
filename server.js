@@ -7,7 +7,6 @@ import pg from 'pg';
 import bcrypt from 'bcrypt';
 import passport from "passport";
 import { Strategy } from "passport-local";
-import GoogleStrategy from "passport-google-oauth2"
 import env from "dotenv";
 import helmet from 'helmet';
 import session from 'express-session';
@@ -22,14 +21,12 @@ app.set('views','views');
 app.set('view engine', 'ejs');
 app.use(express.static('public', { index: false, redirect: false })); //extra security (just in case)
 app.use(helmet());
-// Enable trust proxy
-//app.set('trust proxy', true);
 
 // Use the store in your session middleware
 app.use(session({
   secret: process.env.SESSION_SECRET, //session secret
   resave: false,
-  saveUninitialized: false,
+  saveUninitialized: true,
   cookie: {
     secure: false,
     httpOnly: true, // Restricts access to the cookie to HTTP requests only
@@ -37,8 +34,7 @@ app.use(session({
     maxAge: 20*60*1000, // Session expiration time in milliseconds
   },
 })); //stores the info of the user
-
-app.use(passport.initialize()); //passport is needed for oauth2
+app.use(passport.initialize());
 app.use(passport.session());
 
 const db = new pg.Client({
@@ -262,6 +258,7 @@ app.post('/weatherApp',limiter, async (req,res) => {
   } catch (error) {
     //if the weatherApp breaks or fails to make a request
     console.error("Failed to make weatherApp request: ", error.message);
+    console.log('error in weather post')
     res.redirect('/');
   }    
 })
@@ -272,7 +269,6 @@ app.get("/bookReview",  async (req, res) => {
     if (req.isAuthenticated()) {
       res.redirect('/home')
     } else {
-      console.log('session data: ',req.user)
       let sort = req.session.sort
       let availableBooks
       if (sort !== undefined) {
@@ -361,6 +357,7 @@ app.get("/home", async (req, res) => {
       console.log(error)
     }
   } else {
+    console.log('req.session: ',req.session)
     res.redirect('/bookReview');
   }
 });
@@ -624,26 +621,12 @@ app.post("/register", async (req, res) => {
   }
 });
   
-app.get(
-  "/auth/google",
-  passport.authenticate("google", {
-    scope: ["profile", "email"],
-  })
-);
-  
-app.get(
-  "/auth/google/home",
-  passport.authenticate("google", {
-    successRedirect: "/home",
-    failureRedirect: "/login",
-  })
-);
-  
 app.post(
   "/login",
   passport.authenticate("local", {
     successRedirect: "/home",
     failureRedirect: "/login",
+    failureFlash: true // Optional: enable flash messages for failures
   })
 );
   
@@ -663,7 +646,7 @@ passport.use(
             return cb(err);
           } else {
             if (valid) {
-              return cb(null, user.id);
+              return cb(null, user); // Pass entire user object to serialize
             } else {
               return cb(null, false);
             }
@@ -677,87 +660,26 @@ passport.use(
     }
   })
 );
-//for some reason, when you log in (GoogleStrategy) using an account with multiple google accounts, it doesn't go to the deserializeUser(), it only works with a single google account
-//if you know how to fix it, please tell me how.
-//later im going to implement the reset password. It broke my mind, im learning more about it.  
-passport.use(
-  "google",
-  new GoogleStrategy(
-    {
-      clientID: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: process.env.GOOGLE_CALLBACK_URL,
-      userProfileURL: process.env.GOOGLE_USER_PROFILE_URL,
-    },
-    async (accessToken, refreshToken, profile, cb) => {
-      try {
-        const result = await db.query("SELECT * FROM users WHERE user_name = $1", [
-          profile.email,
-        ]);
-        bcrypt.genSalt(saltRounds, async (err,salt) => {
-          if (result.rows.length === 0) {
-            if (err) {
-              console.log(err)
-              return cb(err)
-            } else {
-              let password = generateRandomString(15);
-              bcrypt.hash(password, salt, async (err, hash) => {
-                if (err) {
-                  console.error("Error hashing password, (google):", err);
-                  return cb(err)
-                } else {
-                  const newUser = await db.query(
-                    "INSERT INTO users (user_name, password, username, weathercount) VALUES ($1, $2, $3, $4)",
-                    [profile.email, hash, profile.displayName, 10]
-                  );
-                  console.log('newUser: ',newUser[0].id)
-                  return cb(null, newUser.rows[0].id);
-                }
-              })
-            }
-          } else {
-            console.log('already there: ',result.rows[0].id)
-            return cb(null, result.rows[0].id);
-          }
-        })
-      } catch (err) {
-        console.log('error by google')
-        return cb(err);
-      }
-  })
-)
 
 passport.serializeUser((user, cb) => {
-  console.log('user (serialization): ',user)
-  cb(null, user); // Assuming user object has an `id` property
+  cb(null, user.id); // Assuming user object has an `id` property
 });
 
-passport.deserializeUser(async (user, cb) => {
-  console.log('called me')
+passport.deserializeUser(async (id, cb) => {
   try {
-    // Convert the user ID to a number (if it's not already)
-    const userId = Number(user);
-    
-    // Query the database for the user with the specified ID
-    const result = await db.query("SELECT * FROM users WHERE id = $1", [userId]);
-    console.log('result: ',result.rows)
-
-    // Check if a user was found
+    const result = await db.query('SELECT * FROM users WHERE id = $1', [id]);
     if (result.rows.length > 0) {
-      // If a user was found, return the first user object
       const user = result.rows[0];
-      console.log('user (deserialization): ',user)
       cb(null, user);
     } else {
-      // If no user was found, return an error
-      cb(new Error("User not found"));
+      cb(new Error('User not found'));
     }
   } catch (err) {
-    // If an error occurred during deserialization, return the error
-    console.err('error occurred during deserialization')
+    console.error('Error during deserialization:', err);
     cb(err);
   }
 });
+
 
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}.`)
