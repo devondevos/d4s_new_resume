@@ -208,6 +208,7 @@ app.post('/weatherApp', async (req,res) => {
     console.log('part 2')
     //trying to find the location of the user to render the latitude and longitude to the API_URL
     const locationAPI = `${process.env.WEATHERAPP_LOCATION}=${userAddress}+${userSuburb}${process.env.WEATHERAPP_5}=${process.env.WEATHERAPP_6}`
+    console.log('part 2.0.1')
     const userLocation = await axios.get(locationAPI)
 
     console.log('part 2.1')
