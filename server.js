@@ -174,7 +174,7 @@ app.get('/weatherApp', async (req, res) => {
     let userName = req.session.user;
     console.log('userName: ',userName)
 
-    let userCount = await db.query('SELECT weathercount, time_checked FROM users WHERE user_name = $1', [userName.user_name]);
+    /*let userCount = await db.query('SELECT weathercount, time_checked FROM users WHERE user_name = $1', [userName.user_name]);
 
     const currentDateTime = new Date();
     const lastCheckedDate = new Date(userCount.rows[0].time_checked);
@@ -183,7 +183,7 @@ app.get('/weatherApp', async (req, res) => {
     if (currentDateTime - lastCheckedDate >= 24 * 60 * 60 * 1000) {
       // Reset the count and update the lastChecked date
       await db.query('UPDATE users SET weathercount = $1, time_checked = $2 WHERE user_name = $3', [10, currentDateTime, userName.user_name]);
-    }
+    }*/
     res.render('project_2.ejs', { data: "Waiting for information", userHeader: userName });
   } else {
     res.redirect('/?showAlert=true')
@@ -194,7 +194,7 @@ app.get('/weatherApp', async (req, res) => {
   }
 });
 
-app.post('/weatherApp',limiter, async (req,res) => {
+app.post('/weatherApp', async (req,res) => {
   try {
     let userName = req.session.user
     //getting the location and amount of days, the user entered
@@ -242,10 +242,10 @@ app.post('/weatherApp',limiter, async (req,res) => {
         };
       });
 
-      let remainingCount = req.rateLimit.remaining;
+      /*let remainingCount = req.rateLimit.remaining;
       let timeChecked = new Date(); // Current time
       await db.query('UPDATE users SET weathercount = $1, time_checked = $2 WHERE user_name = $3', [remainingCount, timeChecked, userName.user_name]);
-
+      */
       res.render('project_2.ejs', {userHeader:userName, timeZone:timeZone, data:weatherApp, currentTimeAndDay:currentTimeAndDay.toLocaleDateString('en-US', {weekday: 'long', hour: 'numeric', minute:'numeric', hour12:false})})
     } else {
       //if the location is not found
