@@ -55,7 +55,6 @@ app.use(cors({
   allowedHeaders: process.env.CORS_ALLOWED_HEADERS,
 }));
 
-/*
 //security
 app.use(async (req, res, next) => {
   try {
@@ -69,25 +68,7 @@ app.use(async (req, res, next) => {
     console.error("Error getting images to be sent to the header: (2)", error);
     next(error); // Forward the error to the error handling middleware
   }
-});*/
-
-/*generates a random password for each user
-function generateRandomString(length) {
-  const characters = process.env.DATABASE_RANDOM;
-  let result = '';
-  const charactersLength = characters.length;
-  for (let i = 0; i < length; i++) {
-      result += characters.charAt(Math.floor(Math.random() * charactersLength));
-  }
-  return result;
-}*/
-
-//second page
-//limiter for requests, so i don't get penalized (for second page)
-/*const limiter = rateLimit({
-  windowMs: 24 * 60 * 60 * 1000, // 24 hour window
-  max: 10, // limit each IP to 10 requests per windowMs
-});*/
+});
 
 //third page middleware
 //calls the info from the books database, and sorts it
@@ -107,7 +88,6 @@ app.get('/', async (req, res) => {
 
 
 //first page
-
 // Handle PUT requests to '/editItem' endpoint
 app.put('/editItem', (req, res) => {
   const indexToEdit = req.body.index;
