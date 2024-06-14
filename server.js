@@ -55,6 +55,7 @@ app.use(cors({
   allowedHeaders: process.env.CORS_ALLOWED_HEADERS,
 }));
 
+/*
 //security
 app.use(async (req, res, next) => {
   try {
@@ -68,7 +69,7 @@ app.use(async (req, res, next) => {
     console.error("Error getting images to be sent to the header: (2)", error);
     next(error); // Forward the error to the error handling middleware
   }
-});
+});*/
 
 /*generates a random password for each user
 function generateRandomString(length) {
