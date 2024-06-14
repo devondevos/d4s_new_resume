@@ -30,7 +30,7 @@ app.use(session({
   cookie: {
     secure: false,
     httpOnly: true, // Restricts access to the cookie to HTTP requests only
-    sameSite: process.env.SESSION_SAME_SITE, // Prevents the session cookie from being sent in cross-site requests
+    sameSite: 'strict', // Prevents the session cookie from being sent in cross-site requests
     maxAge: 20*60*1000, // Session expiration time in milliseconds
   },
 })); //stores the info of the user
@@ -196,71 +196,86 @@ app.get('/weatherApp', async (req, res) => {
 
 app.post('/weatherApp', async (req,res) => {
   try {
-    console.log('part one')
-    let userName = req.session.user
-    //getting the location and amount of days, the user entered
+    console.log('part one');
+    let userName = req.session.user;
+    // Getting the location and amount of days the user entered
     const userAddress = req.body.userAddress;
     const userSuburb = req.body.userSuburb;
     let userDays = req.body.userDays;
     if (userDays > 7) {
-      userDays = 7
+      userDays = 7;
     }
-    console.log('part 2')
-    //trying to find the location of the user to render the latitude and longitude to the API_URL
-    const locationAPI = `${process.env.WEATHERAPP_LOCATION}=${userAddress}+${userSuburb}${process.env.WEATHERAPP_5}=${process.env.WEATHERAPP_6}`
-    console.log('part 2.0.1')
-    console.log('locationAPI: ',locationAPI)
-    const userLocation = await axios.get(locationAPI)
-    console.log('userLocation.data: ',userLocation.data)
-
-    console.log('part 2.1')
-    //if there is data sent to the api
-    if (userLocation.data && userLocation.data.length > 0) {
-      //assigning the appropriate latitude and longitude values
-      const userLatitude = userLocation.data[0].lat;
-      const userLongitude = userLocation.data[0].lon;
-
-      console.log('part 2.2')
-      //the latitude and longitude is returned from the locationApi, from the location the user entered in
-      const API_URL = `${process.env.WEATHERAPP_LATITUDE}=${userLatitude}${process.env.WEATHERAPP_1}=${userLongitude}${process.env.WEATHERAPP_2}=${process.env.WEATHERAPP_3}=${process.env.WEATHERAPP_4}=${userDays}`;
-      //returning the api with the details from the user
-      const response = await axios.get(API_URL);
-      //finding the respective data from the api
-      const time = response.data.hourly.time;
-      const temperature_2m = response.data.hourly.temperature_2m;
-      const timeZone = response.data.timezone;
-
-      console.log('part 2.3')
-      //displaying the date and time on the client side from the api's
-      const currentTimeAndDay = new Date();
-
-      //grouping the time and the temperatures together
-      const weatherApp = time.map((currentTime, index) => {
-        const date = new Date(currentTime);
-        //only want the time value which is the second value in the array, the first value is the year-month-day
-        const timeOnly = currentTime.split('T')[1];
-        //getting your current time
-        const currentHour = currentTimeAndDay.getHours();
-
-        return {
-          //values to display the information as i customized
-          date: date.toLocaleDateString('en-US', { weekday: 'short' }),
-          time: timeOnly,
-          temperature_2m: temperature_2m[index],
-        };
+    console.log('part 2');
+  
+    // Trying to find the location of the user to render the latitude and longitude to the API_URL
+    const locationAPI = `${process.env.WEATHERAPP_LOCATION}=${userAddress}+${userSuburb}${process.env.WEATHERAPP_5}=${process.env.WEATHERAPP_6}`;
+    console.log('part 2.0.1');
+    console.log('locationAPI: ', locationAPI);
+  
+    axios.get(locationAPI)
+      .then(userLocation => {
+        console.log('userLocation.data: ', userLocation.data);
+        console.log('part 2.1');
+  
+        // If there is data sent to the API
+        if (userLocation.data && userLocation.data.length > 0) {
+          // Assigning the appropriate latitude and longitude values
+          const userLatitude = userLocation.data[0].lat;
+          const userLongitude = userLocation.data[0].lon;
+          
+          console.log('part 2.2');
+          // The latitude and longitude is returned from the location API, from the location the user entered in
+          const API_URL = `${process.env.WEATHERAPP_LATITUDE}=${userLatitude}${process.env.WEATHERAPP_1}=${userLongitude}${process.env.WEATHERAPP_2}=${process.env.WEATHERAPP_3}=${process.env.WEATHERAPP_4}=${userDays}`;
+          
+          // Returning the API with the details from the user
+          return axios.get(API_URL);
+        } else {
+          // If the location is not found
+          throw new Error("No location data found");
+        }
+      })
+      .then(response => {
+        // Handling the weather data
+        const time = response.data.hourly.time;
+        const temperature_2m = response.data.hourly.temperature_2m;
+        const timeZone = response.data.timezone;
+  
+        console.log('part 2.3');
+        // Displaying the date and time on the client side from the APIs
+        const currentTimeAndDay = new Date();
+  
+        // Grouping the time and the temperatures together
+        const weatherApp = time.map((currentTime, index) => {
+          const date = new Date(currentTime);
+          // Only want the time value which is the second value in the array, the first value is the year-month-day
+          const timeOnly = currentTime.split('T')[1];
+          // Getting your current time
+          const currentHour = currentTimeAndDay.getHours();
+  
+          return {
+            // Values to display the information as I customized
+            date: date.toLocaleDateString('en-US', { weekday: 'short' }),
+            time: timeOnly,
+            temperature_2m: temperature_2m[index],
+          };
+        });
+  
+        console.log('part 3');
+        res.render('project_2.ejs', {
+          userHeader: userName,
+          timeZone: timeZone,
+          data: weatherApp,
+          currentTimeAndDay: currentTimeAndDay.toLocaleDateString('en-US', { weekday: 'long', hour: 'numeric', minute: 'numeric', hour12: false })
+        });
+      })
+      .catch(error => {
+        console.error('Error:', error.message || error);
+        res.render('project_2.ejs', {
+          userHeader: userName,
+          data: [],
+          errorMessage: error.message || 'An error occurred while fetching data. Please try again.'
+        });
       });
-
-      /*let remainingCount = req.rateLimit.remaining;
-      let timeChecked = new Date(); // Current time
-      await db.query('UPDATE users SET weathercount = $1, time_checked = $2 WHERE user_name = $3', [remainingCount, timeChecked, userName.user_name]);
-      */
-     console.log('part 3')
-      res.render('project_2.ejs', {userHeader:userName, timeZone:timeZone, data:weatherApp, currentTimeAndDay:currentTimeAndDay.toLocaleDateString('en-US', {weekday: 'long', hour: 'numeric', minute:'numeric', hour12:false})})
-    } else {
-      //if the location is not found
-      console.error("No location data found");
-      res.render('project_2.ejs', { userHeader:userName, data: [], errorMessage: "Location not found, try again, maybe don't type the street or avenue part." });
-    }
   } catch (error) {
     //if the weatherApp breaks or fails to make a request
     console.error("Failed to make weatherApp request: ", error.message);
