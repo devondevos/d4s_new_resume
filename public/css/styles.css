@@ -123,6 +123,7 @@ a {
     width: 100%;
     background-color: #e5b485; /* Background color for the sticky header */
     z-index: 1000; /* Ensure the header appears above other content */
+    height: 47px;
 }
 
 .theLogo {
@@ -130,7 +131,7 @@ a {
 }
 
 .headerName {
-    padding-top: 40px;
+    padding-top: 30px;
 }
 
 .loginButton {
@@ -271,24 +272,39 @@ a.fixed_link {
 }
 
 #project_one {
+    filter: brightness(0.70);
+    transition-duration: 210ms;
     background-image: url('../images/Project1.png');
     background-size: cover;
 }
 
 #project_two {
+    filter: brightness(0.70);
+    transition-duration: 210ms;
     background-image: url('../images/Project2.png');
     background-size: cover;
 }
 
 #project_three {
+    filter: brightness(0.70);
+    transition-duration: 210ms;
     background-image: url('../images/Project3.png');
     background-size: cover;
     background-repeat: no-repeat;
 }
 
 #coming_soon {
+    filter: brightness(0.70);
+    transition-duration: 210ms;
     background-image: url('../images/comingSoon.png');
     background-size: cover; 
+}
+
+#project_one:hover, #project_two:hover, #project_three:hover, #coming_soon:hover {
+    filter: brightness(1.01); /* Slightly brighter on hover */
+    transform: scale(1.03); /* Slight zoom-in on hover */
+    text-decoration: underline;
+    text-decoration-color: grey;
 }
 
 /*second page, project 1*/
@@ -696,7 +712,7 @@ input, textarea {
 }
 
 .editButton {
-    width: 100px;
+    width: 60px;
 }
 
 .deleteForm {
@@ -706,7 +722,7 @@ input, textarea {
 
 .deleteButton {
     margin-left: auto;
-    width: 100px;
+    width: 60px;
 }
 
 .link {
@@ -798,7 +814,7 @@ svg.bi.bi-cloud-sun.me-2{
 
 @media (max-width: 373px) {
     .headerName {
-        padding-top: 50px;
+        padding-top: 35px;
     }
     #profile_name {
         font-size: 11px;
@@ -836,6 +852,14 @@ svg.bi.bi-cloud-sun.me-2{
         font-size: 1.5rem;
         font-weight: bold;
     }
+    .logo {
+        font-size: 2rem;
+        font-weight: 500;
+    }
+    .cvName {
+        font-size: 1.5rem;
+        font-weight: 600;
+    }
 }
 
 /* Media query for single-column layout when there's only one item */
@@ -844,7 +868,7 @@ svg.bi.bi-cloud-sun.me-2{
       width: 100%;
     }
     #itemShown {
-        display: inline;
+        display: inline-flex;
     }
     .todoItemList {
         padding-bottom: 5px;
