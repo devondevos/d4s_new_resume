@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { response } from 'express';
 import bodyParser from 'body-parser';
 import axios from 'axios';
 import cors from 'cors';
@@ -189,17 +189,15 @@ app.post('/weatherApp', async (req,res) => {
     console.log('part 2');
   
     console.log('part 2.0.1');
-    axios.get(`${process.env.WEATHERAPP_LOCATION}=${userAddress}+${userSuburb}${process.env.WEATHERAPP_5}=${process.env.WEATHERAPP_6}`)
-      console.log('part yes')
+    axios.get(`${process.env.WEATHERAPP_LOCATION}=${userAddress}%${userSuburb}${process.env.WEATHERAPP_5}=${process.env.WEATHERAPP_6}=${process.env.WEATHERAPP_APIKEY}`)
       .then(userLocation => {
-        console.log('userLocation.data: ', userLocation.data);
-        console.log('part 2.1');
+        console.log('part 2.1')
   
         // If there is data sent to the API
-        if (userLocation.data && userLocation.data.length > 0) {
+        if (userLocation.data.results && userLocation.data.results.length > 0) {
           // Assigning the appropriate latitude and longitude values
-          const userLatitude = userLocation.data[0].lat;
-          const userLongitude = userLocation.data[0].lon;
+          const userLatitude = userLocation.data.results[0].lat;
+          const userLongitude = userLocation.data.results[0].lon;
           
           console.log('part 2.2');
           // The latitude and longitude is returned from the location API, from the location the user entered in
