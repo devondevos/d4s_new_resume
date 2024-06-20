@@ -17,6 +17,10 @@ $(document).ready(function() {
     $('.close, .modal').click(function() {
         $('#myModal').css('display', 'none');
     });
+    // when the user hovers over whatsapp icon, my number must show
+    $('.whatsappImg').click(function() {
+        $('.whatsappNum').toggle();
+    });
 });
 
 /*project 1 */
@@ -64,7 +68,7 @@ const displayValues = (values) => {
     $('#itemShown').empty();
     // Display each value in the list
     values.forEach(function (todoItem, index) {
-        const listItem = $('<li class="todoItemList">');
+        const listItem = $('<li class="todoItemList col-sm-12 col-md-6 col-lg-4">');
         //allows whitespaces to be preserved
         const itemContainer = $('<div class="listedItems" maxlength="2048" aria-expanded="false">' + todoItem + '</div>');
         const buttonsContainer = $('<div class="todoItemListButtons"></div>');

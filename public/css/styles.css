@@ -19,12 +19,15 @@ header {
 }
 
 footer {
-    text-align: center;
     background-color: #e5b485;
     color: black;
     padding: 10px;
     height: auto;
     margin-top: auto;
+}
+
+.shoutOuts {
+    text-align: center;
 }
 
 a {
@@ -123,7 +126,7 @@ a {
     width: 100%;
     background-color: #e5b485; /* Background color for the sticky header */
     z-index: 1000; /* Ensure the header appears above other content */
-    height: 47px;
+    height: 45px;
 }
 
 .theLogo {
@@ -131,7 +134,7 @@ a {
 }
 
 .headerName {
-    padding-top: 30px;
+    padding-top: 33px;
 }
 
 .loginButton {
@@ -180,6 +183,8 @@ a {
 
 #profilePic1, #profilePic2, #profilePic3 {
     border-radius: 20px;
+    height: 600px;
+    width: auto
 }
 
 .dropdown {
@@ -210,7 +215,6 @@ a {
     background-color: #e5b485;
     min-width: 100%;
     z-index: 2;
-
 }
 
 /* Style for the dropdown items */
@@ -220,11 +224,6 @@ a {
     text-decoration: none;
     color: black;
     transition: background-color 0.2s ease;
-}
-
-/* Show the dropdown content when the button is hovered */
-.dropdown:hover .dropdown-content {
-    display: block;
 }
 
 .dropdown.active .dropdown-content {
@@ -385,10 +384,8 @@ textarea {
 }
 
 #itemShown {
-    list-style-type: decimal;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(calc(49% - 20px), 1fr));
-    grid-gap: 25px;
+    list-style-type: none;
+    padding-left: 5px;
 }
 
 .listedItems {
@@ -524,8 +521,8 @@ textarea {
 .projects-dropdown {
     border: 2px solid lightgray;
     border-radius: 5px;
-    padding: 2px;
-    width: 150px;
+    /*padding: 5px;*/
+    width: 200px;
     position: absolute; /* Position the dropdown relative to the button */
     top: 100%; /* Align the top of the dropdown with the bottom of the button */
     left: 50%; /* Move the dropdown to the center of the button */
@@ -543,7 +540,7 @@ textarea {
     font-size: small;
     border: 2px solid lightgray;
     border-radius: 5px;
-    padding: 2px;
+    /*padding: 2px;*/
     width: 250px;
     position: absolute; /* Position the dropdown relative to the button */
     top: 100%; /* Align the top of the dropdown with the bottom of the button */
@@ -609,7 +606,7 @@ textarea {
 }
 
 .notLogIn {
-    width: auto;
+    width: 130px;
 }
 
 .bi {
@@ -796,8 +793,37 @@ svg.bi.bi-cloud-sun.me-2{
 }
 
 .footerImg {
+    height: 25px;
+    width: 25px;
+}
+
+.userLinks {
+    display: inline-flex;
+}
+
+.userLinks p {
+    margin-bottom: 9px;
+    margin-left: 5px;
+    margin-right: 5px;
+    display: inline-flex;
+}
+
+.footerShoutOut {
     height: 15px;
     width: 15px;
+}
+
+.whatsappNum {
+    display: none;
+}
+
+.whatsappImg:hover {
+    cursor: pointer;
+}
+
+.footerWord {
+    margin-left: 5px;
+    margin-right: 5px;
 }
 
 @media screen and (max-width: 310px) {
@@ -817,7 +843,11 @@ svg.bi.bi-cloud-sun.me-2{
     }
 }
 
-@media (max-width: 373px) {
+@media (max-width: 375px) {
+    #profilePic1 ,#profilePic2 ,#profilePic3 {
+        height: 200px;
+        width: auto;
+    }
     .headerName {
         padding-top: 35px;
     }
@@ -837,8 +867,13 @@ svg.bi.bi-cloud-sun.me-2{
         font-size: 1rem;
     }    
 }
-
 @media (max-width: 576px) {
+    .headerName {
+        display: none;
+    }
+    .headerNavLinks {
+        padding-top: 35px;
+    }
     .rating_time {
         width: 50%;
         background-color: #85b6e5;
@@ -847,8 +882,33 @@ svg.bi.bi-cloud-sun.me-2{
     .bookImg {
         width: 12rem;
     }
+    #footer {
+        font-size: 0.8rem;
+        padding: 5px;
+    }
+    .footerWords {
+        display: none;
+    }    
+    .userLinks {
+        display: flex;
+        justify-content: center;
+    }
+    .userLinks p {
+        display: inline;
+    }
+    .footerImg {
+        height: 35px;
+        width: 35px;
+        margin-bottom: 5px;
+        margin-left: 10px;
+        margin-right: 10px;   
+    }
 }
-
+@media (min-width: 577px) {
+    .headerName {
+        display: block;
+    }
+}
 @media (max-width: 600px) {
     .footer {
         justify-content: start;
@@ -869,19 +929,23 @@ svg.bi.bi-cloud-sun.me-2{
 
 /* Media query for single-column layout when there's only one item */
 @media screen and (max-width: 768px) {
+    #profilePic1, #profilePic2, #profilePic3 {
+        height: 350px;
+    }
     .bookItem {
       width: 100%;
     }
-    #itemShown {
-        display: inline-flex;
-    }
     .todoItemList {
-        padding-bottom: 5px;
+        padding-bottom: 4px;
         border-bottom: 1px solid lightgray;
-        margin: 10px;
     }
     .userForm {
         width: 70%;
+    }
+}
+@media (max-width: 767px) {
+    #footer {
+        text-align: center;
     }
 }
 

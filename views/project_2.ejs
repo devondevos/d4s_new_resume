@@ -5,6 +5,11 @@
         <h1>Weather App</h1>
         <p>Your tries is limited on this page (there is a rate-limiter on how many times you can search for the weather, the reason for logging in, is only to keep track of how many times you use the weatherApp, but also your location information is not stored in any way) Enjoy.</p>
         <p>The rate-limiter is there to protect my website from abuse or bots or overuse, as per the api usage.</p>
+        <div>
+            <% if (locals.message) { %>
+                <%= message %>
+            <% } %>
+        </div>
         <form class="userForm" action="/weatherApp" method="POST">
             <input class="address userInput" type="text" name="userAddress" placeholder="Enter the suburb:" autocomplete="off">
             <input class="suburb userInput" type="text" name="userSuburb" placeholder="Enter the town/city:" required autocomplete="off">

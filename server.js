@@ -108,9 +108,7 @@ app.put('/editItem', (req, res) => {
 app.delete('/removeItem', (req, res) => {
   // Retrieve the index of the item to be removed from the request body
   const indexToRemove = req.body.index;
-  console.log('index: ',indexToRemove)
   let todoArray = req.session.todoArray || []
-  console.log('delete todoArray: ',todoArray)
 
   // Remove the item from the todoArray if the index is valid
   if (indexToRemove >= 0 && indexToRemove < todoArray.length) {
@@ -118,8 +116,6 @@ app.delete('/removeItem', (req, res) => {
   }
 
   req.session.todoArray = todoArray
-  console.log('new todoArray: ',todoArray)
-  console.log('new req.session.todoArray: ',req.session.todoArray)
   // Send a JSON response with the updated todoArray to the client
   res.json({ values: todoArray });
 });
@@ -130,13 +126,10 @@ app.post('/form', (req, res) => {
   const item = req.body.listItem;
   // Array to store todo items temporarily
   let todoArray = req.session.todoArray || [];
-  console.log('post todoArray (1): ',todoArray)
   // Add the item to the todoArray
   todoArray.push(item);
-  console.log('push todoArray: ',todoArray)
   //adding the temporary information of the todoArray to the session
   req.session.todoArray = todoArray
-  console.log('req.session (todoArray): ',req.session)
   // Send a JSON response with the updated todoArray to the client
   res.json({ values: todoArray });
 });
@@ -145,7 +138,6 @@ app.post('/form', (req, res) => {
 app.get('/todoList', (req,res) => {
   let userName = req.session.user || undefined
   let todoArray = req.session.todoArray || []
-  console.log('req.session.id: ',req.session.id)
   res.render('project_1', { todoArray, userHeader:userName });
 })
 
@@ -153,10 +145,9 @@ app.get('/weatherApp', async (req, res) => {
   try {
     if (req.isAuthenticated()) {
     let userName = req.session.user;
-    console.log('userName: ',userName)
 
-    /*let userCount = await db.query('SELECT weathercount, time_checked FROM users WHERE user_name = $1', [userName.user_name]);
-
+    let userCount = await db.query('SELECT weathercount, time_checked FROM users WHERE user_name = $1', [userName.user_name]);
+    req.session.userCount = userCount.rows[0].weathercount
     const currentDateTime = new Date();
     const lastCheckedDate = new Date(userCount.rows[0].time_checked);
 
@@ -164,7 +155,7 @@ app.get('/weatherApp', async (req, res) => {
     if (currentDateTime - lastCheckedDate >= 24 * 60 * 60 * 1000) {
       // Reset the count and update the lastChecked date
       await db.query('UPDATE users SET weathercount = $1, time_checked = $2 WHERE user_name = $3', [10, currentDateTime, userName.user_name]);
-    }*/
+    }
     res.render('project_2.ejs', { data: "Waiting for information", userHeader: userName });
   } else {
     res.redirect('/?showAlert=true')
@@ -177,85 +168,90 @@ app.get('/weatherApp', async (req, res) => {
 
 app.post('/weatherApp', async (req,res) => {
   try {
-    console.log('part one');
-    let userName = req.session.user;
-    // Getting the location and amount of days the user entered
-    const userAddress = req.body.userAddress;
-    const userSuburb = req.body.userSuburb;
-    let userDays = req.body.userDays;
-    if (userDays > 7) {
-      userDays = 7;
-    }
-    console.log('part 2');
-  
-    console.log('part 2.0.1');
-    axios.get(`${process.env.WEATHERAPP_LOCATION}=${userAddress}%${userSuburb}${process.env.WEATHERAPP_5}=${process.env.WEATHERAPP_6}=${process.env.WEATHERAPP_APIKEY}`)
-      .then(userLocation => {
-        console.log('part 2.1')
-  
-        // If there is data sent to the API
-        if (userLocation.data.results && userLocation.data.results.length > 0) {
-          // Assigning the appropriate latitude and longitude values
-          const userLatitude = userLocation.data.results[0].lat;
-          const userLongitude = userLocation.data.results[0].lon;
+    if (req.isAuthenticated()){
+      let userName = req.session.user;
+      let userCount = req.session.userCount
+      // Getting the location and amount of days the user entered
+      const userAddress = req.body.userAddress;
+      const userSuburb = req.body.userSuburb;
+      let userDays = req.body.userDays;
+      if (userDays > 7) {
+        userDays = 7;
+      }
+      if (userCount > 0) {
+        axios.get(`${process.env.WEATHERAPP_LOCATION}=${userAddress}%${userSuburb}${process.env.WEATHERAPP_5}=${process.env.WEATHERAPP_6}=${process.env.WEATHERAPP_APIKEY}`)
+        .then(async (userLocation) => {
+          req.session.userCount = userCount - 1
+          let weatherCount = req.session.userCount
+          const currentDateTime = new Date();
+          await db.query('UPDATE users SET weathercount = $1, time_checked = $2 WHERE user_name = $3', [weatherCount, currentDateTime, userName.user_name])
+          // If there is data sent to the API
+          if (userLocation.data.results && userLocation.data.results.length > 0) {
+            // Assigning the appropriate latitude and longitude values
+            const userLatitude = userLocation.data.results[0].lat;
+            const userLongitude = userLocation.data.results[0].lon;
           
-          console.log('part 2.2');
-          // The latitude and longitude is returned from the location API, from the location the user entered in
-          const API_URL = `${process.env.WEATHERAPP_LATITUDE}=${userLatitude}${process.env.WEATHERAPP_1}=${userLongitude}${process.env.WEATHERAPP_2}=${process.env.WEATHERAPP_3}=${process.env.WEATHERAPP_4}=${userDays}`;
+            // The latitude and longitude is returned from the location API, from the location the user entered in
+            const API_URL = `${process.env.WEATHERAPP_LATITUDE}=${userLatitude}${process.env.WEATHERAPP_1}=${userLongitude}${process.env.WEATHERAPP_2}=${process.env.WEATHERAPP_3}=${process.env.WEATHERAPP_4}=${userDays}`;
           
-          // Returning the API with the details from the user
-          return axios.get(API_URL);
-        } else {
-          // If the location is not found
-          throw new Error("No location data found");
-        }
-      })
-      .then(response => {
-        // Handling the weather data
-        const time = response.data.hourly.time;
-        const temperature_2m = response.data.hourly.temperature_2m;
-        const timeZone = response.data.timezone;
+            // Returning the API with the details from the user
+            return axios.get(API_URL);
+          } else {
+            // If the location is not found
+            throw new Error("No location data found");
+          }
+        })
+        .then(response => {
+          // Handling the weather data
+          const time = response.data.hourly.time;
+          const temperature_2m = response.data.hourly.temperature_2m;
+          const timeZone = response.data.timezone;
   
-        console.log('part 2.3');
-        // Displaying the date and time on the client side from the APIs
-        const currentTimeAndDay = new Date();
+          // Displaying the date and time on the client side from the APIs
+          const currentTimeAndDay = new Date();
   
-        // Grouping the time and the temperatures together
-        const weatherApp = time.map((currentTime, index) => {
-          const date = new Date(currentTime);
-          // Only want the time value which is the second value in the array, the first value is the year-month-day
-          const timeOnly = currentTime.split('T')[1];
-          // Getting your current time
-          const currentHour = currentTimeAndDay.getHours();
+          // Grouping the time and the temperatures together
+          const weatherApp = time.map((currentTime, index) => {
+            const date = new Date(currentTime);
+            // Only want the time value which is the second value in the array, the first value is the year-month-day
+            const timeOnly = currentTime.split('T')[1];
+            // Getting your current time
+            const currentHour = currentTimeAndDay.getHours();
   
-          return {
-            // Values to display the information as I customized
-            date: date.toLocaleDateString('en-US', { weekday: 'short' }),
-            time: timeOnly,
-            temperature_2m: temperature_2m[index],
-          };
+            return {
+              // Values to display the information as I customized
+              date: date.toLocaleDateString('en-US', { weekday: 'short' }),
+              time: timeOnly,
+              temperature_2m: temperature_2m[index],
+            };
+          });
+  
+          res.render('project_2.ejs', {
+            userHeader: userName,
+            timeZone: timeZone,
+            data: weatherApp,
+            currentTimeAndDay: currentTimeAndDay.toLocaleDateString('en-US', { weekday: 'long', hour: 'numeric', minute: 'numeric', hour12: false })
+          });
+        })
+        .catch(error => {
+          console.error('Error:', error.message || error);
+          res.render('project_2.ejs', {
+            userHeader: userName,
+            data: [],
+            errorMessage: error.message || 'An error occurred while fetching data. Please try again.'
+          });
         });
-  
-        console.log('part 3');
-        res.render('project_2.ejs', {
-          userHeader: userName,
-          timeZone: timeZone,
-          data: weatherApp,
-          currentTimeAndDay: currentTimeAndDay.toLocaleDateString('en-US', { weekday: 'long', hour: 'numeric', minute: 'numeric', hour12: false })
-        });
-      })
-      .catch(error => {
-        console.error('Error:', error.message || error);
+      } else {
         res.render('project_2.ejs', {
           userHeader: userName,
           data: [],
-          errorMessage: error.message || 'An error occurred while fetching data. Please try again.'
-        });
-      });
+          message: 'Your tries exceed 10, try again in 24 hours.'
+        })
+      }
+    }
   } catch (error) {
     //if the weatherApp breaks or fails to make a request
     console.error("Failed to make weatherApp request: ", error.message);
-    console.log('error in weather post')
     res.redirect('/');
   }    
 })
@@ -354,7 +350,6 @@ app.get("/home", async (req, res) => {
       console.log(error)
     }
   } else {
-    console.log('req.session: ',req.session)
     res.redirect('/bookReview');
   }
 });
@@ -384,7 +379,6 @@ app.get("/logout", (req, res) => {
             return (err);
           }
         });
-        console.log('Session destroyed, user logged out');
       }
     });
     res.redirect('/login')
@@ -411,7 +405,6 @@ app.post('/changeUser', (req,res) => {
               return (err);
             }
           });
-          console.log('Session destroyed, user changed');
         }
       });
       res.redirect('/login')
