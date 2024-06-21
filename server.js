@@ -359,8 +359,10 @@ app.get("/login", (req, res) => {
 });
   
 app.get("/register", (req, res) => {
+  const message = req.session.loginOrRegisterMessage;
+  delete req.session.loginOrRegisterMessage; // Clear the message after retrieving it
   // Render the page without the modal
-  res.render("project_3/register.ejs");
+  res.render("project_3/register.ejs", { loginOrRegisterMessage: message });
 });
   
 app.get("/logout", (req, res) => {
@@ -581,7 +583,7 @@ app.post("/register", async (req, res) => {
   const email = req.body.user_email;
   const password = req.body.userPassword;
   const userName = req.body.username
-  
+  const confirmPassword = req.body.confirmPassword
   try {
     const checkResult = await db.query("SELECT * FROM users WHERE user_name = $1", [
       email,
@@ -590,21 +592,26 @@ app.post("/register", async (req, res) => {
     if (checkResult.rows.length > 0) {
       res.redirect("/login");
     } else {
-      bcrypt.hash(password, saltRounds, async (err, hash) => {
-        if (err) {
-          console.error("Error hashing password (local:", err);
-        } else {
-          const result = await db.query(
-            "INSERT INTO users (user_name, password, username, weathercount) VALUES ($1, $2, $3, $4) RETURNING *",
-            [email, hash, userName, 10]
-          );
-          const user = result.rows[0];
-          req.login(user, (err) => {
-            req.session.user = user
-            res.redirect("/");
-          });
-        }
-      });
+      if (password === confirmPassword) {
+        bcrypt.hash(password, saltRounds, async (err, hash) => {
+          if (err) {
+            console.error("Error hashing password (local:", err);
+          } else {
+            const result = await db.query(
+              "INSERT INTO users (user_name, password, username, weathercount) VALUES ($1, $2, $3, $4) RETURNING *",
+              [email, hash, userName, 10]
+            );
+            const user = result.rows[0];
+            req.login(user, (err) => {
+              req.session.user = user
+              res.redirect("/");
+            });
+          }
+        });
+      } else {
+        req.session.loginOrRegisterMessage = "Your passwords don't match."
+        res.redirect('/register')
+      }
     }
   } catch (err) {
     console.log(err);
