@@ -358,11 +358,11 @@ app.get("/login", (req, res) => {
   res.render("project_3/login.ejs");
 });
   
+let message = "Register"
 app.get("/register", (req, res) => {
-  const message = req.session.loginOrRegisterMessage;
-  delete req.session.loginOrRegisterMessage; // Clear the message after retrieving it
   // Render the page without the modal
   res.render("project_3/register.ejs", { loginOrRegisterMessage: message });
+  message = "Register"
 });
   
 app.get("/logout", (req, res) => {
@@ -584,15 +584,17 @@ app.post("/register", async (req, res) => {
   const password = req.body.userPassword;
   const userName = req.body.username
   const confirmPassword = req.body.confirmPassword
+  console.log(`password: ${password}, confirmPassword: ${confirmPassword}`)
   try {
-    const checkResult = await db.query("SELECT * FROM users WHERE user_name = $1", [
-      email,
-    ]);
+    if (password === confirmPassword) {
+      const checkResult = await db.query("SELECT * FROM users WHERE user_name = $1", [
+        email,
+      ]);
   
-    if (checkResult.rows.length > 0) {
-      res.redirect("/login");
-    } else {
-      if (password === confirmPassword) {
+      if (checkResult.rows.length > 0) {
+        res.redirect("/login");
+      } else {
+        console.log('password match')
         bcrypt.hash(password, saltRounds, async (err, hash) => {
           if (err) {
             console.error("Error hashing password (local:", err);
@@ -608,13 +610,15 @@ app.post("/register", async (req, res) => {
             });
           }
         });
-      } else {
-        req.session.loginOrRegisterMessage = "Your passwords don't match."
-        res.redirect('/register')
       }
+    } else {
+      console.log("password don't match");
+      message = "Your password don't match";
+      res.redirect('/register');
     }
   } catch (err) {
     console.log(err);
+    res.redirect('/');
   }
 });
   
